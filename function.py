@@ -48,13 +48,13 @@ from flask import Flask, abort, request
 
 
 def line_reply(reply, event):
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
 
 def text_reply(content, event):
     reply = TextSendMessage(text=content)
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
 
@@ -67,34 +67,34 @@ def rand_text_reply(n, content, event):
 def img_reply(URL, event):
     reply = ImageSendMessage(
         original_content_url=URL, preview_image_url=URL)
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
 
 def audio_reply(URL, event):
     reply = AudioSendMessage(
         original_content_url=URL, duration=100000)
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
 
 def video_reply(URL, URL2, event):
     reply = VideoSendMessage(
         original_content_url=URL, preview_image_url=URL2)
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
 
 def flex_reply(words, content, event):
     reply = FlexSendMessage(words, content)
-    LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(
         event.reply_token, reply)
 
 
 def F_sound2text(event):
     PATH = 'tmp.mp3'
-    audio_content = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN")
+    audio_content = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                                ).get_message_content(event.message.id)
     with open(PATH, 'wb') as fd:
         for chunk in audio_content.iter_content():
@@ -448,8 +448,8 @@ def F_GoogleSearch(get_message, event):
 
 def F_tmr(send_headers, split, event):
     data = {
-        'idpwLgid': os.environ.get("SMA_ID"),
-        'idpwLgpw': os.environ.get("SMA_PW"),
+        'idpwLgid': os.getenv('SMA_ID', None),
+        'idpwLgpw': os.getenv('SMA_PW', None),
         'my_prevtyp': 'S',
         'my_prevdom': 'smavoice.jp',
         'my_prevurl': '/s/sma03/artist/45/contents',
@@ -626,10 +626,10 @@ def F_pttPreview(get_message, event):
 
 def F_twitterPreview(get_message, event):
     urlElement = get_message.split('/')
-    auth = tweepy.OAuthHandler(os.environ.get(
-        "TWITTER_APP_KEY"), os.environ.get("TWITTER_APP_SECRET"))
-    auth.set_access_token(os.environ.get(
-        "TWITTER_ACCESS_TOKEN"), os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"))
+    auth = tweepy.OAuthHandler(
+        os.getenv('TWITTER_APP_KEY', None), os.getenv('TWITTER_APP_SECRET', None))
+    auth.set_access_token(os.getenv('TWITTER_ACCESS_TOKEN', None), os.getenv(
+        'TWITTER_ACCESS_TOKEN_SECRET', None))
     api = tweepy.API(auth)
     tweet = api.get_status(urlElement[-1])
     with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
