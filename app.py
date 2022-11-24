@@ -68,7 +68,7 @@ previous_user_name = ''
 def callback():
 
     if request.method == "GET":
-        return "Hello Heroku"
+        return "Hello"
     if request.method == "POST":
         signature = request.headers["X-Line-Signature"]
         body = request.get_data(as_text=True)
@@ -100,7 +100,7 @@ def handle_message(event):
         group_id = 'N/A'
     group = 'C0862e003396d3da93b9016d848560f29'
 
-    line_bot_api = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN"))
+    line_bot_api = LineBotApi(channel_access_token)
     try:
         profile = line_bot_api.get_group_member_profile(
             group_id, id)
@@ -292,7 +292,7 @@ def handle_message_Audio(event):
     except:
         group_id = 'N/A'
 
-    line_bot_api = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN"))
+    line_bot_api = LineBotApi(channel_access_token)
     try:
         profile = line_bot_api.get_group_member_profile(
             group_id, id)
