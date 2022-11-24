@@ -268,6 +268,8 @@ def handle_message(event):
         pass
 
     if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
+        with open('previous_user_name.txt', 'r') as f:
+            previous_user_name = f.read()
         text_reply(f'@{previous_user_name} 😡', event)
 
     if Message_counter == 2:
@@ -280,7 +282,8 @@ def handle_message(event):
         words = bully_words[bully_names.index(user_name)]
         bully(int(p), words, event)
 
-    previous_user_name = user_name
+    with open('previous_user_name.txt', 'w') as f:
+        f.write(user_name)
 
 
 @handler.add(MessageEvent, message=AudioMessage)
