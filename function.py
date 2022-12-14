@@ -774,13 +774,16 @@ def F_rate(get_message, send_headers, event):
 def F_chatGPT(get_message, event):
     with open("json/chatGPT_config.json", encoding="utf-8") as f:
         config = json.load(f)
-    chatbot = Chatbot(config, debug=False)
-    prompt = "\nYou:\n"+get_message[5:]
     try:
-        message = chatbot.get_chat_response(prompt)
-        text_reply(message["message"], event)
+        chatbot = Chatbot(config, debug=False)
+        prompt = "\nYou:\n"+get_message[5:]
+        try:
+            message = chatbot.get_chat_response(prompt)
+            text_reply(message["message"], event)
+        except:
+            text_reply("Something went wrong!", event)
     except:
-        text_reply("Something went wrong!", event)
+        text_reply("can't link to chatGPT", event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
