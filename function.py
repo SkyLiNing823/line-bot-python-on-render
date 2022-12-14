@@ -772,23 +772,12 @@ def F_rate(get_message, send_headers, event):
 
 
 def F_chatGPT(get_message, event):
-    try:
-        os.system('python3 -m playwright install')
-        print('playwright installed')
-    except:
-        print('playwright failed to install')
     with open("json/chatGPT_config.json", encoding="utf-8") as f:
         config = json.load(f)
-    try:
-        chatbot = Chatbot(config, debug=False)
-        prompt = "\nYou:\n"+get_message[5:]
-        try:
-            message = chatbot.get_chat_response(prompt)
-            text_reply(message["message"], event)
-        except:
-            text_reply("Something went wrong!", event)
-    except:
-        text_reply("can't link to chatGPT", event)
+    chatbot = Chatbot(config, debug=False)
+    prompt = "\nYou:\n"+get_message[5:]
+    message = chatbot.get_chat_response(prompt)
+    text_reply(message["message"], event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)

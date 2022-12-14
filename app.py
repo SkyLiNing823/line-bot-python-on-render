@@ -42,6 +42,8 @@ send_headers = {
 
 app = Flask(__name__)
 
+os.system('python3 -m playwright install')
+
 # get channel_secret and channel_access_token from your environment variable
 
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
