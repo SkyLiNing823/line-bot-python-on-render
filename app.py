@@ -44,7 +44,11 @@ app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
 
-os.system('python3 -m playwright install')
+try:
+    os.system('python3 -m playwright install')
+    print('playwright installed')
+except:
+    print('playwright failed to install')
 
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
@@ -265,7 +269,7 @@ def handle_message(event):
     if get_message == '!history':
         F_history(event)
 
-    if l_get_message == '!bot':
+    if l_get_message == '!gpt':
         F_chatGPT(get_message, event)
 
     if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
