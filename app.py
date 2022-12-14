@@ -136,6 +136,9 @@ def handle_message(event):
     with open('json/setting.json', 'r', encoding='utf8') as jfile:
         jdata = json.load(jfile)
 
+    if split[0].lower() == '!gpt':
+        F_chatGPT(get_message, event)
+
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)
 
@@ -268,9 +271,6 @@ def handle_message(event):
 
     if get_message == '!history':
         F_history(event)
-
-    if l_get_message == '!gpt':
-        F_chatGPT(get_message, event)
 
     if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
         with open('previous_user_name.txt', 'r') as f:

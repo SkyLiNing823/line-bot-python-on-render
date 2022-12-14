@@ -27,3 +27,4 @@ pydub==0.25.1
 SpeechRecognition==3.8.1
 ffmpeg==1.4
 gTTS==2.2.4
+playwright==1.28.0
