@@ -772,6 +772,11 @@ def F_rate(get_message, send_headers, event):
 
 
 def F_chatGPT(get_message, event):
+    try:
+        os.system('python3 -m playwright install')
+        print('playwright installed')
+    except:
+        print('playwright failed to install')
     with open("json/chatGPT_config.json", encoding="utf-8") as f:
         config = json.load(f)
     try:
