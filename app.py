@@ -44,6 +44,8 @@ app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
 
+os.system('python3 -m playwright install')
+
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
@@ -264,8 +266,7 @@ def handle_message(event):
         F_history(event)
 
     if l_get_message == '!bot':
-        # F_bot()
-        pass
+        F_chatGPT(get_message, event)
 
     if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
         with open('previous_user_name.txt', 'r') as f:

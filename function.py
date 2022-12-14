@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import speech_recognition as sr
 from pydub import AudioSegment
 from gtts import gTTS
+from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
 
 from flask import Flask, abort, request
@@ -769,6 +770,18 @@ def F_rate(get_message, send_headers, event):
                                                             sellout_rate.get_text().strip())
     text_reply(words, event)
 
+
+def F_chatGPT(get_message, event):
+    with open("json/chatGPT_config.json", encoding="utf-8") as f:
+        config = json.load(f)
+    chatbot = Chatbot(config, debug=False)
+    prompt = "\nYou:\n"+get_message[3:]
+    try:
+        print("Chatbot: ")
+        message = chatbot.get_chat_response(prompt)
+        text_reply(message["message"], event)
+    except:
+        text_reply("Something went wrong!", event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
