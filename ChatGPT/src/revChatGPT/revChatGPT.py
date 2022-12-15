@@ -13,7 +13,7 @@ from typing import List
 
 from playwright.async_api import async_playwright
 from cf_clearance2 import async_cf_retry, async_stealth
-from pyvirtualdisplay import Display
+#from pyvirtualdisplay import Display
 
 
 def generate_uuid() -> str:
@@ -368,8 +368,8 @@ class AsyncChatbot:
         :return: None
         """
         async with async_playwright() as p:
-            display = Display(visible=0, size=(900, 800))
-            display.start()
+            #display = Display(visible=0, size=(900, 800))
+            # display.start()
             browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
             await async_stealth(page, pure=False)
@@ -395,7 +395,7 @@ class AsyncChatbot:
             del browser
             self.config['cf_clearance'] = cf_clearance_value
             self.config['user_agent'] = ua
-            display.stop()
+            # display.stop()
 
     def send_feedback(
         self,
