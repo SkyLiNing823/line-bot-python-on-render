@@ -261,10 +261,8 @@ def handle_message(event):
     if l_get_message == '!face':
         F_faceDetect(event)
 
-    if l_get_message == '!find':
-        with open('photo_search.txt', 'w') as f:
-            f.write('True')
-        text_reply('請傳送一張圖片\n(如果無回應圖搜結果請再!find一次)', event)
+    if l_get_message == '!img':
+        text_reply(uploadIMG("IMG.jpg"), event)
 
     if get_message[:5] == '!vote':
         F_vote(event)
@@ -319,14 +317,6 @@ def handle_message_Image(event):
     with open(PATH, 'wb') as fd:
         for chunk in image_content.iter_content():
             fd.write(chunk)
-    with open('photo_search.txt', 'r') as f:
-        photo_search = f.read()
-    if photo_search == 'True':
-        URL = 'https://www.google.com/searchbyimage?&image_url=' + \
-            uploadIMG(PATH)
-        with open('photo_search.txt', 'w') as f:
-            f.write('False')
-        text_reply(URL, event)
 
 
 @handler.add(PostbackEvent)  # Postback的部分
