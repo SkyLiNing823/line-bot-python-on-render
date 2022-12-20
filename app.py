@@ -258,6 +258,9 @@ def handle_message(event):
     if get_message[:5] == '!rate':
         F_rate(get_message, send_headers, event)
 
+    if l_get_message == '!face':
+        F_faceDetect(event)
+
     if l_get_message == '!find':
         with open('photo_search.txt', 'w') as f:
             f.write('True')
@@ -311,14 +314,14 @@ def handle_message_Audio(event):
 
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_message_Image(event):
+    PATH = 'IMG.jpg'
+    image_content = line_bot_api.get_message_content(event.message.id)
+    with open(PATH, 'wb') as fd:
+        for chunk in image_content.iter_content():
+            fd.write(chunk)
     with open('photo_search.txt', 'r') as f:
         photo_search = f.read()
     if photo_search == 'True':
-        PATH = 'search.jpg'
-        image_content = line_bot_api.get_message_content(event.message.id)
-        with open(PATH, 'wb') as fd:
-            for chunk in image_content.iter_content():
-                fd.write(chunk)
         URL = 'https://www.google.com/searchbyimage?&image_url=' + \
             uploadIMG(PATH)
         with open('photo_search.txt', 'w') as f:

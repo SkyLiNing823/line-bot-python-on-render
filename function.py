@@ -20,7 +20,8 @@ import matplotlib.pyplot as plt
 import speech_recognition as sr
 from pydub import AudioSegment
 from gtts import gTTS
-from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
+import cv2
+#from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
 
 from flask import Flask, abort, request
@@ -772,12 +773,29 @@ def F_rate(get_message, send_headers, event):
 
 
 def F_chatGPT(get_message, event):
-    with open("json/chatGPT_config.json", encoding="utf-8") as f:
-        config = json.load(f)
-    chatbot = Chatbot(config, debug=False)
-    prompt = "\nYou:\n"+get_message[5:]
-    message = chatbot.get_chat_response(prompt)
-    text_reply(message["message"], event)
+    pass
+#     with open("json/chatGPT_config.json", encoding="utf-8") as f:
+#         config = json.load(f)
+#     chatbot = Chatbot(config, debug=False)
+#     prompt = "\nYou:\n"+get_message[5:]
+#     message = chatbot.get_chat_response(prompt)
+#     text_reply(message["message"], event)
+
+
+def F_faceDetect(event):
+    img = cv2.imread("IMG.jpg")
+    grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 透過轉換函式轉為灰階影像
+    color = (0, 255, 0)  # 定義框的顏色
+    face_classifier = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    faceRects = face_classifier.detectMultiScale(
+        grayImg, scaleFactor=1.2, minNeighbors=3, minSize=(32, 32))
+    if len(faceRects):
+        for faceRect in faceRects:
+            x, y, w, h = faceRect
+            cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
+    cv2.imwrite("face.jpg", img)
+    img_reply(uploadIMG("face.jpg"), event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
