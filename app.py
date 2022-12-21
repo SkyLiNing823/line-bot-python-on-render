@@ -258,16 +258,16 @@ def handle_message(event):
     if get_message[:5] == '!rate':
         F_rate(get_message, send_headers, event)
 
-    if l_get_message == '!face':
+    if l_get_message.lower() == '!face':
         F_faceDetect(event)
 
-    if l_get_message == '!img':
+    if l_get_message.lower() == '!img':
         text_reply(uploadIMG("IMG.jpg"), event)
 
-    if get_message[:5] == '!vote':
+    if get_message[:5].lower() == '!vote':
         F_vote(event)
 
-    if get_message == '!history':
+    if get_message.lower() == '!history':
         F_history(event)
 
     if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
