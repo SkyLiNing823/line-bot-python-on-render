@@ -814,7 +814,7 @@ def F_faceDetect(event):
         cv2.rectangle(img, (startX, startY), (endX, endY),
                       (0, 0, 255), 2)
         cv2.putText(img, text, (startX, y),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
     cv2.imwrite("face.jpg", img)
     img_reply(uploadIMG("face.jpg"), event)
 
