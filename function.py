@@ -21,6 +21,8 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from gtts import gTTS
 import cv2
+import argparse
+import numpy as np
 #from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
 
@@ -784,17 +786,50 @@ def F_chatGPT(get_message, event):
 
 def F_faceDetect(event):
     img = cv2.imread("IMG.jpg")
-    grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 透過轉換函式轉為灰階影像
-    color = (0, 255, 0)  # 定義框的顏色
-    face_classifier = cv2.CascadeClassifier(
-        cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    faceRects = face_classifier.detectMultiScale(grayImg, scaleFactor=1.2)
-    if len(faceRects):
-        for faceRect in faceRects:
-            x, y, w, h = faceRect
-            cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
+    net = cv2.dnn.readNetFromCaffe(
+        "deploy.prototxt.txt", "res10_300x300_ssd_iter_140000.caffemodel")
+    h, w = img.shape[:2]
+    blob = cv2.dnn.blobFromImage(cv2.resize(
+        img, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    net.setInput(blob)
+    detections = net.forward()
+    # loop over the detections
+    for i in range(0, detections.shape[2]):
+        # extract the confidence (i.e., probability) associated with the
+        # prediction
+        confidence = detections[0, 0, i, 2]
+        # filter out weak detections by ensuring the `confidence` is
+        # greater than the minimum confidence
+        if confidence < 0.5:
+            continue
+        # compute the (x, y)-coordinates of the bounding box for the
+        # object
+        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+        (startX, startY, endX, endY) = box.astype("int")
+
+        # draw the bounding box of the face along with the associated
+        # probability
+        text = "{:.2f}%".format(confidence * 100)
+        y = startY - 10 if startY - 10 > 10 else startY + 10
+        cv2.rectangle(img, (startX, startY), (endX, endY),
+                      (0, 0, 255), 2)
+        cv2.putText(img, text, (startX, y),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
     cv2.imwrite("face.jpg", img)
     img_reply(uploadIMG("face.jpg"), event)
+
+    # img = cv2.imread("IMG.jpg")
+    # grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 透過轉換函式轉為灰階影像
+    # color = (0, 255, 0)  # 定義框的顏色
+    # face_classifier = cv2.CascadeClassifier(
+    #     cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    # faceRects = face_classifier.detectMultiScale(grayImg, scaleFactor=1.15)
+    # if len(faceRects):
+    #     for faceRect in faceRects:
+    #         x, y, w, h = faceRect
+    #         cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
+    # cv2.imwrite("face.jpg", img)
+    # img_reply(uploadIMG("face.jpg"), event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
