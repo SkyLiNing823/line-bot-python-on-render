@@ -788,7 +788,7 @@ def F_faceDetect(event):
     color = (0, 255, 0)  # 定義框的顏色
     face_classifier = cv2.CascadeClassifier(
         cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    faceRects = face_classifier.detectMultiScale(grayImg, scaleFactor=1.02)
+    faceRects = face_classifier.detectMultiScale(grayImg, scaleFactor=1.1)
     if len(faceRects):
         for faceRect in faceRects:
             x, y, w, h = faceRect
