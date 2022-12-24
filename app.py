@@ -265,7 +265,7 @@ def handle_message(event):
         F_oppaiDetect(event)
 
     if l_get_message.lower() == '!rbg':
-        F_remveBG(event)
+        F_removeBG(event)
 
     if l_get_message.lower() == '!img':
         text_reply(uploadIMG("IMG.jpg"), event)

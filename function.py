@@ -830,6 +830,14 @@ def F_oppaiDetect(event):
     cv2.imwrite("oppai.png", img)
     img_reply(uploadIMG("oppai.png"), event)
 
+
+def F_removeBG(event):
+    img = cv2.imread("IMG.png")
+    segmentor = cvzone.SelfiSegmentationModule.SelfiSegmentation()
+    rBGimg = segmentor.removeBG(img, (255, 255, 255), threshold=0.99)
+    cv2.imwrite("rBG.png", rBGimg)
+    img_reply(uploadIMG("rBG.png"), event)
+
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
 #     print(response.url)
