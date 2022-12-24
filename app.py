@@ -264,6 +264,9 @@ def handle_message(event):
     if l_get_message.lower() == '!oppai':
         F_oppaiDetect(event)
 
+    if l_get_message.lower() == '!rbg':
+        F_remveBG(event)
+
     if l_get_message.lower() == '!img':
         text_reply(uploadIMG("IMG.jpg"), event)
 
@@ -315,7 +318,7 @@ def handle_message_Audio(event):
 
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_message_Image(event):
-    PATH = 'IMG.jpg'
+    PATH = 'IMG.png'
     image_content = line_bot_api.get_message_content(event.message.id)
     with open(PATH, 'wb') as fd:
         for chunk in image_content.iter_content():

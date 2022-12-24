@@ -32,3 +32,4 @@ nest-asyncio==1.5.6
 cf-clearance2==0.28.3
 PyVirtualDisplay==3.0
 opencv-python==4.6.0.66
+cvzone==1.5.6

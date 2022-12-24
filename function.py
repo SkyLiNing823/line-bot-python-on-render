@@ -23,6 +23,7 @@ from gtts import gTTS
 import cv2
 import argparse
 import numpy as np
+import cvzone
 #from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
 
@@ -785,7 +786,7 @@ def F_chatGPT(get_message, event):
 
 
 def F_faceDetect(event):
-    img = cv2.imread("IMG.jpg")
+    img = cv2.imread("IMG.png")
     net = cv2.dnn.readNetFromCaffe(
         "deploy.prototxt.txt", "res10_300x300_ssd_iter_140000.caffemodel")
     h, w = img.shape[:2]
@@ -812,12 +813,12 @@ def F_faceDetect(event):
         for faceRect in faceRects:
             x, y, w, h = faceRect
             cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
-    cv2.imwrite("face.jpg", img)
-    img_reply(uploadIMG("face.jpg"), event)
+    cv2.imwrite("face.png", img)
+    img_reply(uploadIMG("face.png"), event)
 
 
 def F_oppaiDetect(event):
-    img = cv2.imread("IMG.jpg")
+    img = cv2.imread("IMG.png")
     color = (0, 255, 0)
     grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     oppai_classifier = cv2.CascadeClassifier('./xml/cascade_oppai.xml')
@@ -826,8 +827,8 @@ def F_oppaiDetect(event):
         for oppaiRect in oppaiRects:
             x, y, w, h = oppaiRect
             cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
-    cv2.imwrite("oppai.jpg", img)
-    img_reply(uploadIMG("oppai.jpg"), event)
+    cv2.imwrite("oppai.png", img)
+    img_reply(uploadIMG("oppai.png"), event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)
