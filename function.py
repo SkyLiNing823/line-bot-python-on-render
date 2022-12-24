@@ -820,7 +820,8 @@ def F_oppaiDetect(event):
     img = cv2.imread("IMG.jpg")
     color = (0, 255, 0)
     grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    oppai_classifier = cv2.CascadeClassifier("xml/haarcascade_oppai.xml")
+    oppai_classifier = cv2.CascadeClassifier()
+    oppai_classifier.load('.\\xml\\cascade_oppai.xml')
     oppaiRects = oppai_classifier.detectMultiScale(grayImg, scaleFactor=1.3)
     if len(oppaiRects):
         for oppaiRect in oppaiRects:
