@@ -258,6 +258,9 @@ def handle_message(event):
     if get_message[:5] == '!rate':
         F_rate(get_message, send_headers, event)
 
+    if l_get_message.lower() == '!od':
+        F_objectDetect(event)
+
     if l_get_message.lower() == '!face':
         F_faceDetect(event)
 

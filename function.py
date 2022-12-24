@@ -23,7 +23,7 @@ from gtts import gTTS
 import cv2
 import argparse
 import numpy as np
-import cvzone
+from imageai.Detection import ObjectDetection
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
 #from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
@@ -784,6 +784,17 @@ def F_chatGPT(get_message, event):
 #     prompt = "\nYou:\n"+get_message[5:]
 #     message = chatbot.get_chat_response(prompt)
 #     text_reply(message["message"], event)
+
+
+def F_objectDetect(event):
+    execution_path = os.getcwd()
+    detector = ObjectDetection()
+    detector.setModelTypeAsTinyYOLOv3()
+    detector.setModelPath(os.path.join(execution_path, "yolo-tiny.h5"))
+    detector.loadModel()
+    detector.detectObjectsFromImage(input_image=os.path.join(execution_path, "IMG.png"), output_image_path=os.path.join(
+        execution_path, "object.png"), minimum_percentage_probability=30,  extract_detected_objects=True)
+    img_reply(uploadIMG("object.png"), event)
 
 
 def F_faceDetect(event):
