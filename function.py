@@ -815,18 +815,19 @@ def F_faceDetect(event):
     cv2.imwrite("face.jpg", img)
     img_reply(uploadIMG("face.jpg"), event)
 
-    # img = cv2.imread("IMG.jpg")
-    # grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 透過轉換函式轉為灰階影像
-    # color = (0, 255, 0)  # 定義框的顏色
-    # face_classifier = cv2.CascadeClassifier(
-    #     cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    # faceRects = face_classifier.detectMultiScale(grayImg, scaleFactor=1.15)
-    # if len(faceRects):
-    #     for faceRect in faceRects:
-    #         x, y, w, h = faceRect
-    #         cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
-    # cv2.imwrite("face.jpg", img)
-    # img_reply(uploadIMG("face.jpg"), event)
+
+def F_oppaiDetect(event):
+    img = cv2.imread("IMG.jpg")
+    color = (0, 255, 0)
+    grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    oppai_classifier = cv2.CascadeClassifier("xml/haarcascade_oppai.xml")
+    oppaiRects = oppai_classifier.detectMultiScale(grayImg, scaleFactor=1.3)
+    if len(oppaiRects):
+        for oppaiRect in oppaiRects:
+            x, y, w, h = oppaiRect
+            cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
+    cv2.imwrite("oppai.jpg", img)
+    img_reply(uploadIMG("oppai.jpg"), event)
 
 # def F_searchIMG(URL, send_headers, event):
 #     response = requests.get(URL, headers=send_headers)

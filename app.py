@@ -261,6 +261,9 @@ def handle_message(event):
     if l_get_message.lower() == '!face':
         F_faceDetect(event)
 
+    if l_get_message.lower() == '!oppai':
+        F_oppaiDetect(event)
+
     if l_get_message.lower() == '!img':
         text_reply(uploadIMG("IMG.jpg"), event)
 
