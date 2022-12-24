@@ -24,6 +24,7 @@ import cv2
 import argparse
 import numpy as np
 import cvzone
+from cvzone.SelfiSegmentationModule import SelfiSegmentation
 #from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
 
 
@@ -833,7 +834,7 @@ def F_oppaiDetect(event):
 
 def F_removeBG(event):
     img = cv2.imread("IMG.png")
-    segmentor = cvzone.SelfiSegmentationModule.SelfiSegmentation()
+    segmentor = SelfiSegmentation()
     rBGimg = segmentor.removeBG(img, (255, 255, 255), threshold=0.99)
     cv2.imwrite("rBG.png", rBGimg)
     img_reply(uploadIMG("rBG.png"), event)
