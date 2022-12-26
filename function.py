@@ -25,7 +25,7 @@ import argparse
 import numpy as np
 # from imageai.Detection import ObjectDetection
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
-#from ChatGPT.src.revChatGPT.revChatGPT import Chatbot
+from easychatgpt import ChatClient
 
 
 from flask import Flask, abort, request
@@ -777,7 +777,11 @@ def F_rate(get_message, send_headers, event):
 
 
 def F_chatGPT(get_message, event):
-    pass
+    OPENAI_EMAIL = os.getenv("OPENAI_EMAIL")
+    OPENAI_PASSWORD = os.getenv("OPENAI_PASSWORD")
+    chat = ChatClient(OPENAI_EMAIL, OPENAI_PASSWORD)
+    answer = chat.interact(get_message[5:])
+    text_reply(answer, event)
 #     with open("json/chatGPT_config.json", encoding="utf-8") as f:
 #         config = json.load(f)
 #     chatbot = Chatbot(config, debug=False)
