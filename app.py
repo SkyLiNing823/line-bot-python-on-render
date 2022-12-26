@@ -43,6 +43,7 @@ send_headers = {
 app = Flask(__name__)
 
 # os.system('python3 -m playwright install')
+os.system('apt-get install sudo')
 os.system('sudo apt install ffmpeg -y')
 
 # get channel_secret and channel_access_token from your environment variable
