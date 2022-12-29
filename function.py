@@ -687,42 +687,61 @@ def F_twitterPreview(get_message, event):
     line_reply(msg, event)
 
 
-def F_bahamutePreview(l_get_message, jdata):
-    cookie = eval(jdata['baha_cookie'])
-    request = requests.get(l_get_message, headers=cookie)
-    html = request.content
-    print(html)
+def F_bahamutePreview(event):
+    data = {
+        'uid': os.getenv('baha_UID', None),
+        'passwd': os.getenv('baha_PW', None),
+        'vcode': '7045'
+    }
+    rs = requests.session()
+    rs.headers.update({
+        'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
+        'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
+        'x-bahamut-app-android': 'tw.com.gamer.android.activecenter',
+        'x-bahamut-app-version': '251',
+        'content-type': 'application/x-www-form-urlencoded',
+        'content-length': '44',
+        'accept-encoding': 'gzip',
+        'cookie': 'ckAPP_VCODE=7045'
+    })
+    request = rs.post(
+        'https://api.gamer.com.tw/mobile_app/user/v3/do_login.php', data=data)
+
+    rs.headers = {
+        'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
+        'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
+        'x-bahamut-app-android': 'tw.com.gamer.android.activecenter',
+        'x-bahamut-app-version': '251',
+        'accept-encoding': 'gzip',
+    }
+    request = rs.get(
+        'https://forum.gamer.com.tw/C.php?bsn=60076&snA=7057824&tnum=4270')
+
+    html = request.text
+    html = html.replace('</div>', '\n</div>')
+    article = ''
     bsObj = BeautifulSoup(html, 'html.parser')
-    shouter = bsObj.find('h1', {'class', 'c-post__header__title'})
-    title = shouter.text
-    shouter = bsObj.find('a', {'class', 'username'})
-    poster = shouter.text
-    shouter = bsObj.findAll('a', {'class', 'tippy-gpbp-list'})
-    x = 0
-    for item in shouter:
-        if x == 0:
-            GP = item.text
-        elif x == 1:
-            BP = item.text
-        else:
-            break
-        x += 1
-    content = ''
-    shouter = bsObj.findAll('div', {'class', 'c-article__content'})
-    for item in shouter:
-        shouter2 = item.findAll('div')
-        for item2 in shouter2:
-            content += item2.text+'\n'
-        break
-    if len(content) > 1000:
-        content = content[:1000]
-        content += '\n\n-字數過多,以下省略-'
-    text = title+'\n' +\
-        '樓主: '+poster+'\n' +\
-        'GP: '+GP+'  BP: '+BP+'\n' +\
-        '- \n' +\
-        content
-    return text
+    title = bsObj.findAll('h1', {'class': 'title'})[0].text
+    rawCtn = bsObj.findAll('div', {'class': 'c-article__content'}
+                           )[0]
+    ctn = rawCtn.findAll('div')
+    article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
+    last_url = ''
+    for row in ctn:
+        article += row.text
+        try:
+            url = row.find('a', {'class': 'photoswipe-image'})['href']
+            article += '\n'+url+'\n'
+        except:
+            pass
+        try:
+            url = row.find('iframe', {'class': 'lazyload'})['data-src']
+            if url != last_url:
+                article += '\n'+url+'\n'
+            last_url = url
+        except:
+            pass
+    text_reply(article, event)
 
 
 def F_randnum(get_message, event):
