@@ -964,7 +964,7 @@ def F_manga(event):
     gray[gray <= th1] = 0
     gray[gray >= th2] = 255
     cv2.imwrite("MANGA.png", gray)
-    text_reply(uploadIMG("MANGA.png"), event)
+    img_reply(uploadIMG("MANGA.png"), event)
 
 
 def F_vote(event):
