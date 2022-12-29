@@ -953,23 +953,19 @@ def F_removeBG(event):
     cv2.imwrite("rBG.png", rBGimg)
     img_reply(uploadIMG("rBG.png"), event)
 
-# def F_searchIMG(URL, send_headers, event):
-#     response = requests.get(URL, headers=send_headers)
-#     print(response.url)
-#     response = requests.get(response.url, headers=send_headers)
-#     html = response.content
-#     bsObj = BeautifulSoup(html, 'html.parser')
-#     shouter = bsObj.findAll('div', {'class', 'yuRUbf'})
-#     # reply = f'{URL}'
-#     reply = f'以圖搜圖({URL})的可能結果為：\n'
-#     for items in shouter:
-#         item = items.select('a')[0]
-#         try:
-#             href = item['href']
-#             reply += f'\n{href}\n'
-#         except:
-#             pass
-#     text_reply(reply, event)
+
+def F_manga(event):
+    th1 = 60
+    th2 = 120
+    img = cv2.imread("IMG.png")
+    blur = cv2.GaussianBlur(img, (0, 0), 50)
+    img = cv2.addWeighted(img, 1.5, blur, -0.5, 0)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # edge = 255 - cv2.Canny(gray, 80, 120)
+    gray[gray <= th1] = 0
+    gray[gray >= th2] = 255
+    cv2.imwrite("MANGA.png", gray)
+    text_reply(uploadIMG("MANGA.png"), event)
 
 
 def F_vote(event):
