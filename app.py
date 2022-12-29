@@ -251,7 +251,7 @@ def handle_message(event):
         F_twitterPreview(get_message, event)
 
     if 'forum.gamer.com.tw' in get_message:
-        F_bahamutePreview(event)
+        F_bahamutePreview(get_message, event)
         pass
 
     if get_message[:5] == '!rand':

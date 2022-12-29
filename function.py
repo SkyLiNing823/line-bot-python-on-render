@@ -687,7 +687,7 @@ def F_twitterPreview(get_message, event):
     line_reply(msg, event)
 
 
-def F_bahamutePreview(event):
+def F_bahamutePreview(get_message, event):
     data = {
         'uid': os.getenv('baha_UID', None),
         'passwd': os.getenv('baha_PW', None),
@@ -714,9 +714,7 @@ def F_bahamutePreview(event):
         'x-bahamut-app-version': '251',
         'accept-encoding': 'gzip',
     }
-    request = rs.get(
-        'https://forum.gamer.com.tw/C.php?bsn=60076&snA=7057824&tnum=4270')
-
+    request = rs.get(get_message)
     html = request.text
     html = html.replace('</div>', '\n</div>')
     article = ''
