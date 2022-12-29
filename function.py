@@ -734,8 +734,11 @@ def F_bahamutePreview(get_message, event):
     article += f'樓主: {username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
+    last_ctn = ''
     for row in ctn:
-        article += row.text
+        if last_ctn != row.text:
+            article += row.text
+        last_ctn = row.text
         try:
             block = rawCtn.findAll('a', {'target': '_blank'})
             for url in block:
@@ -789,6 +792,7 @@ def F_bahamuteHomePreview(get_message, event):
     article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
         '-'*len(title)+'\n\n'
     last_url = ''
+    last_ctn = ''
     for row in ctn[:-1]:
         try:
             block = row.findAll('img', {'class': 'lazyload'})
@@ -813,7 +817,9 @@ def F_bahamuteHomePreview(get_message, event):
             last_url = url
         except:
             pass
-        article += row.text
+        if last_ctn != row.text:
+            article += row.text
+        last_ctn = row.text
     if len(article) > 9500:
         article = article[:9500]
     text_reply(article, event)
