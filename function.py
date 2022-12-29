@@ -735,7 +735,7 @@ def F_bahamutePreview(get_message, event):
         '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
     try:
-        block = rawCtn.find('a', {'class': 'photoswipe-image'})
+        block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
         for url in block:
             article += '\n'+url['href']+'\n'
     except:
@@ -749,7 +749,7 @@ def F_bahamutePreview(get_message, event):
         pass
     for row in ctn:
         try:
-            block = rawCtn.find('a', {'class': 'photoswipe-image'})
+            block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
                 article += '\n'+url['href']+'\n'
         except:
@@ -806,7 +806,7 @@ def F_bahamuteHomePreview(get_message, event):
         except:
             pass
         try:
-            url = row.findAll('iframe', {'class': 'lazyload'})['data-src']
+            url = row.find('iframe', {'class': 'lazyload'})['data-src']
             if url != last_url:
                 article += '\n'+url+'\n'
             last_url = url
