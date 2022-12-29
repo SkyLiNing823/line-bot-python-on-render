@@ -955,9 +955,9 @@ def F_removeBG(event):
 
 def F_manga(event):
     th1 = 60
-    th2 = 120
+    th2 = 150
     img = cv2.imread("IMG.png")
-    blur = cv2.GaussianBlur(img, (0, 0), 50)
+    blur = cv2.GaussianBlur(img, (0, 0), 10)
     img = cv2.addWeighted(img, 1.5, blur, -0.5, 0)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # edge = 255 - cv2.Canny(gray, 80, 120)
