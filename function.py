@@ -730,6 +730,18 @@ def F_bahamutePreview(get_message, event):
     article += f'樓主:{username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
+    try:
+        url = rawCtn.find('a', {'class': 'photoswipe-image'})['href']
+        article += '\n'+url+'\n'
+    except:
+        pass
+    try:
+        url = rawCtn.find('iframe', {'class': 'lazyload'})['data-src']
+        if url != last_url:
+            article += '\n'+url+'\n'
+        last_url = url
+    except:
+        pass
     for row in ctn:
         article += row.text
         try:
