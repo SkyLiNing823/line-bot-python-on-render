@@ -760,6 +760,8 @@ def F_bahamutePreview(get_message, event):
         except:
             pass
         article += row.text
+    if len(article) > 5000:
+        article = article[:5000]
     text_reply(article, event)
 
 
@@ -772,7 +774,11 @@ def F_bahamuteHomePreview(get_message, event):
     article = ''
     ctitle = bsObj.findAll('h1', {'class': 'c-title'})[0].text.split(' ')
     date = f'{ctitle[0][2:]} {ctitle[1][:5]}'
-    title = str(ctitle[1][5:])
+    title = ctitle[1][5:]
+    t = 2
+    while t < len(ctitle):
+        title += ' ' + ctitle[t]
+        t += 1
     username = bsObj.findAll('p', {'class': 'gnn_man2'})[0].text[1:]
     rawCtn = bsObj.findAll('div', {'class': 'home_box'}
                            )[0]
@@ -803,6 +809,8 @@ def F_bahamuteHomePreview(get_message, event):
         except:
             pass
         article += row.text
+    if len(article) > 5000:
+        article = article[:5000]
     text_reply(article, event)
 
 
