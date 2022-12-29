@@ -740,6 +740,7 @@ def F_bahamutePreview(get_message, event):
             for url in block:
                 if url != last_url:
                     article += '\n'+url['href']+'\n'
+                last_url = url
         except:
             pass
         try:
@@ -784,7 +785,9 @@ def F_bahamuteHomePreview(get_message, event):
         try:
             block = row.findAll('img', {'class': 'lazyload'})
             for url in block:
-                article += '\n'+url['data-src']+'\n'
+                if url != last_url:
+                    article += '\n'+url['data-src']+'\n'
+                last_url = url
         except:
             pass
         try:
@@ -792,6 +795,7 @@ def F_bahamuteHomePreview(get_message, event):
             for url in block:
                 if url != last_url:
                     article += '\n'+url['href']+'\n'
+                last_url = url
         except:
             pass
         try:
