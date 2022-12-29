@@ -960,9 +960,10 @@ def F_manga(event):
     blur = cv2.GaussianBlur(img, (0, 0), 10)
     img = cv2.addWeighted(img, 1.5, blur, -0.5, 0)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # edge = 255 - cv2.Canny(gray, 80, 120)
+    edge = 255 - cv2.Canny(gray, 80, 120)
     gray[gray <= th1] = 0
     gray[gray >= th2] = 255
+    gray = cv2.bitwise_and(gray, edge)
     cv2.imwrite("MANGA.png", gray)
     img_reply(uploadIMG("MANGA.png"), event)
 
