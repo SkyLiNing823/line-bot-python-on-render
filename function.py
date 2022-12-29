@@ -717,13 +717,18 @@ def F_bahamutePreview(get_message, event):
     request = rs.get(get_message)
     html = request.text
     html = html.replace('</div>', '\n</div>')
-    article = ''
     bsObj = BeautifulSoup(html, 'html.parser')
+    article = ''
     title = bsObj.findAll('h1', {'class': 'title'})[0].text
-    rawCtn = bsObj.findAll('div', {'class': 'c-article__content'}
-                           )[0]
+    username = bsObj.findAll('a', {'class': 'username'})[0].text
+    uid = bsObj.findAll('a', {'class': 'userid'})[0].text
+    gp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[0].text
+    bp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[1].text
+    rawCtn = bsObj.findAll('div', {'class': 'c-article__content'})[0]
     ctn = rawCtn.findAll('div')
     article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
+    article += f'樓主:{username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
+        '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
     for row in ctn:
         article += row.text
