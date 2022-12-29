@@ -735,6 +735,15 @@ def F_bahamutePreview(get_message, event):
         '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
     for row in ctn:
+        article += row.text
+        try:
+            block = rawCtn.findAll('a', {'target': '_blank'})
+            for url in block:
+                if url != last_url:
+                    article += '\n'+url['href']+'\n'
+                last_url = url
+        except:
+            pass
         try:
             block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
@@ -750,7 +759,6 @@ def F_bahamutePreview(get_message, event):
             last_url = url
         except:
             pass
-        article += row.text
     if len(article) > 9000:
         article = article[:9500]
     text_reply(article, event)
