@@ -21,7 +21,6 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from gtts import gTTS
 import cv2
-import argparse
 import numpy as np
 # from imageai.Detection import ObjectDetection
 from cvzone.SelfiSegmentationModule import SelfiSegmentation

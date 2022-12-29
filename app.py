@@ -274,6 +274,9 @@ def handle_message(event):
     if l_get_message.lower() == '!rbg':
         F_removeBG(event)
 
+    if l_get_message.lower() == '!manga':
+        F_manga(event)
+
     if l_get_message.lower() == '!img':
         text_reply(uploadIMG("IMG.jpg"), event)
 
