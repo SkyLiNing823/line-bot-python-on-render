@@ -26,7 +26,6 @@ import numpy as np
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
 # from revChatGPT.ChatGPT import Chatbot
 
-
 from flask import Flask, abort, request
 
 # https://github.com/line/line-bot-sdk-python
