@@ -727,7 +727,7 @@ def F_bahamutePreview(get_message, event):
     rawCtn = bsObj.findAll('div', {'class': 'c-article__content'})[0]
     ctn = rawCtn.findAll('div')
     article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
-    article += f'樓主:{username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
+    article += f'樓主: {username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
     last_url = ''
     try:
