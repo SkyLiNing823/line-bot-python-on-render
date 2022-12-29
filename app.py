@@ -252,7 +252,9 @@ def handle_message(event):
 
     if 'forum.gamer.com.tw' in get_message:
         F_bahamutePreview(get_message, event)
-        pass
+
+    if 'home.gamer.com.tw' in get_message:
+        F_bahamuteHomePreview(get_message, event)
 
     if get_message[:5] == '!rand':
         F_randnum(get_message, event)

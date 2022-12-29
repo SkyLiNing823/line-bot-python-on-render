@@ -687,13 +687,13 @@ def F_twitterPreview(get_message, event):
     line_reply(msg, event)
 
 
-def F_bahamutePreview(get_message, event):
+def bahaLogin():
+    rs = requests.session()
     data = {
         'uid': os.getenv('baha_UID', None),
         'passwd': os.getenv('baha_PW', None),
         'vcode': '7045'
     }
-    rs = requests.session()
     rs.headers.update({
         'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
         'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
@@ -706,7 +706,6 @@ def F_bahamutePreview(get_message, event):
     })
     request = rs.post(
         'https://api.gamer.com.tw/mobile_app/user/v3/do_login.php', data=data)
-
     rs.headers = {
         'user-agent': 'Bahadroid (https://www.gamer.com.tw/)',
         'x-bahamut-app-instanceid': 'cc2zQIfDpg4',
@@ -714,6 +713,11 @@ def F_bahamutePreview(get_message, event):
         'x-bahamut-app-version': '251',
         'accept-encoding': 'gzip',
     }
+    return rs
+
+
+def F_bahamutePreview(get_message, event):
+    rs = bahaLogin()
     request = rs.get(get_message)
     html = request.text
     html = html.replace('</div>', '\n</div>')
@@ -743,7 +747,6 @@ def F_bahamutePreview(get_message, event):
     except:
         pass
     for row in ctn:
-        article += row.text
         try:
             url = row.find('a', {'class': 'photoswipe-image'})['href']
             article += '\n'+url+'\n'
@@ -756,6 +759,50 @@ def F_bahamutePreview(get_message, event):
             last_url = url
         except:
             pass
+        article += row.text
+    text_reply(article, event)
+
+
+def F_bahamuteHomePreview(get_message, event):
+    rs = bahaLogin()
+    request = rs.get(get_message)
+    html = request.text
+    html = html.replace('</div>', '\n</div>')
+    bsObj = BeautifulSoup(html, 'html.parser')
+    article = ''
+    ctitle = bsObj.findAll('h1', {'class': 'c-title'})[0].text.split(' ')
+    date = f'{ctitle[0][2:]} {ctitle[1][:5]}'
+    title = str(ctitle[1][5:])
+    username = bsObj.findAll('p', {'class': 'gnn_man2'})[0].text[1:]
+    rawCtn = bsObj.findAll('div', {'class': 'home_box'}
+                           )[0]
+    ctn = rawCtn.findAll('div')
+    info = ctn[-1].text.split('\n')
+    gp = info[1]
+    collect = info[2]
+    article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
+    article += f'{date}\n{username}\ngp: {gp}\n收藏: {collect}\n\n' + \
+        '-'*len(title)+'\n\n'
+    last_url = ''
+    for row in ctn[:-1]:
+        try:
+            url = row.find('img', {'class': 'lazyload'})['data-src']
+            article += '\n'+url+'\n'
+        except:
+            pass
+        try:
+            url = row.find('a', {'class': 'photoswipe-image'})['href']
+            article += '\n'+url+'\n'
+        except:
+            pass
+        try:
+            url = row.find('iframe', {'class': 'lazyload'})['data-src']
+            if url != last_url:
+                article += '\n'+url+'\n'
+            last_url = url
+        except:
+            pass
+        article += row.text
     text_reply(article, event)
 
 
