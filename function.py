@@ -738,7 +738,8 @@ def F_bahamutePreview(get_message, event):
         try:
             block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
-                article += '\n'+url['href']+'\n'
+                if url != last_url:
+                    article += '\n'+url['href']+'\n'
         except:
             pass
         try:
@@ -789,7 +790,8 @@ def F_bahamuteHomePreview(get_message, event):
         try:
             block = row.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
-                article += '\n'+url['href']+'\n'
+                if url != last_url:
+                    article += '\n'+url['href']+'\n'
         except:
             pass
         try:
