@@ -614,7 +614,7 @@ def F_pttPreview(get_message, event):
         text = '\n\n'.join(pre_comment_list)
     else:
         pre_text = all_text.split('批踢踢實業坊(ptt.cc)')[0]
-        pre_text = pre_text.split('--')[0]
+        pre_text = pre_text.split('--\n')[0]
         texts = pre_text.split('\n')
         contents = texts[2:]
         content = '\n'.join(contents)
