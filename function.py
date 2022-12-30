@@ -622,8 +622,8 @@ def F_pttPreview(get_message, event):
             '作者: '+author + '\n' +\
             '-'+'\n' +\
             content
-    if len(text) > 9500:
-        text = text[:9500]
+    if len(text) > 5000:
+        text = text[:5000]
     text_reply(text, event)
 
 
@@ -759,8 +759,8 @@ def F_bahamutePreview(get_message, event):
             last_url.append(url)
         except:
             pass
-    if len(article) > 9000:
-        article = article[:9500]
+    if len(article) > 5000:
+        article = article[:5000]
     text_reply(article, event)
 
 
@@ -817,8 +817,8 @@ def F_bahamuteHomePreview(get_message, event):
         if row.text != last_ctn:
             article += row.text
         last_ctn = row.text
-    if len(article) > 9500:
-        article = article[:9500]
+    if len(article) > 5000:
+        article = article[:5000]
     text_reply(article, event)
 
 
