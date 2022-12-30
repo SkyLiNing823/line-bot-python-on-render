@@ -614,8 +614,7 @@ def F_pttPreview(get_message, event):
         text = '\n\n'.join(pre_comment_list)
     else:
         pre_text = all_text.split('批踢踢實業坊(ptt.cc)')[0]
-        pre_text_list = pre_text.split('--')[:-1]
-        pre_text = ''.join(pre_text_list)
+        pre_text = pre_text.split('--')[0]
         texts = pre_text.split('\n')
         contents = texts[2:]
         content = '\n'.join(contents)
@@ -731,33 +730,33 @@ def F_bahamutePreview(get_message, event):
     article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
     article += f'樓主: {username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
-    last_url = ''
-    last_ctn = ''
+    last_url = []
+    last_ctn = []
     for row in ctn:
-        if last_ctn != row.text:
+        if row.text not in last_ctn:
             article += row.text
-        last_ctn = row.text
+        last_ctn.append(row.text)
         try:
             block = rawCtn.findAll('a', {'target': '_blank'})
             for url in block:
-                if url != last_url:
+                if url not in last_url:
                     article += '\n'+url['href']+'\n'
-                last_url = url
+                last_url.append(url)
         except:
             pass
         try:
             block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
-                if url != last_url:
+                if url not in last_url:
                     article += '\n'+url['href']+'\n'
-                last_url = url
+                last_url.append(url)
         except:
             pass
         try:
             url = row.find('iframe', {'class': 'lazyload'})['data-src']
-            if url != last_url:
+            if url not in last_url:
                 article += '\n'+url+'\n'
-            last_url = url
+            last_url.append(url)
         except:
             pass
     if len(article) > 9000:
@@ -789,35 +788,35 @@ def F_bahamuteHomePreview(get_message, event):
     article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
     article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
         '-'*len(title)+'\n\n'
-    last_url = ''
-    last_ctn = ''
+    last_url = []
+    last_ctn = []
     for row in ctn[:-1]:
         try:
             block = row.findAll('img', {'class': 'lazyload'})
             for url in block:
-                if url != last_url:
+                if url not in last_url:
                     article += '\n'+url['data-src']+'\n'
-                last_url = url
+                last_url.append(url)
         except:
             pass
         try:
             block = row.findAll('a', {'class': 'photoswipe-image'})
             for url in block:
-                if url != last_url:
+                if url not in last_url:
                     article += '\n'+url['href']+'\n'
-                last_url = url
+                last_url.append(url)
         except:
             pass
         try:
             url = row.find('iframe', {'class': 'lazyload'})['data-src']
-            if url != last_url:
+            if url not in last_url:
                 article += '\n'+url+'\n'
-            last_url = url
+            last_url.append(url)
         except:
             pass
-        if last_ctn != row.text:
+        if row.text not in last_ctn:
             article += row.text
-        last_ctn = row.text
+        last_ctn.append(row.text)
     if len(article) > 9500:
         article = article[:9500]
     text_reply(article, event)
