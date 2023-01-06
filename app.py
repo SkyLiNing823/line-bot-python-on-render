@@ -266,19 +266,34 @@ def handle_message(event):
     #     F_objectDetect(event)
 
     if l_get_message.lower() == '!face':
-        F_faceDetect(event)
+        if group_id == 'N/A':
+            F_faceDetect(event, id)
+        else:
+            F_faceDetect(event, group_id)
 
     if l_get_message.lower() == '!oppai':
-        F_oppaiDetect(event)
+        if group_id == 'N/A':
+            F_oppaiDetect(event, id)
+        else:
+            F_oppaiDetect(event, group_id)
 
     if l_get_message.lower() == '!rbg':
-        F_removeBG(event)
+        if group_id == 'N/A':
+            F_removeBG(event, id)
+        else:
+            F_removeBG(event, group_id)
 
     if l_get_message.lower() == '!manga':
-        F_manga(event)
+        if group_id == 'N/A':
+            F_manga(event, id)
+        else:
+            F_manga(event, group_id)
 
     if l_get_message.lower() == '!img':
-        text_reply(uploadIMG("IMG.jpg"), event)
+        if group_id == 'N/A':
+            text_reply(uploadIMG(f"{id}.jpg"), event)
+        else:
+            text_reply(uploadIMG(f"{group_id}.jpg"), event)
 
     if get_message[:5].lower() == '!vote':
         F_vote(event)
@@ -328,7 +343,11 @@ def handle_message_Audio(event):
 
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_message_Image(event):
-    PATH = 'IMG.png'
+    try:
+        id = event.source.group_id
+    except:
+        id = event.source.user_id
+    PATH = f'{id}.png'
     image_content = line_bot_api.get_message_content(event.message.id)
     with open(PATH, 'wb') as fd:
         for chunk in image_content.iter_content():

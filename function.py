@@ -899,8 +899,8 @@ def F_rate(get_message, send_headers, event):
 #     img_reply(uploadIMG("object.png"), event)
 
 
-def F_faceDetect(event):
-    img = cv2.imread("IMG.png")
+def F_faceDetect(event,id):
+    img = cv2.imread(f"{id}.png")
     net = cv2.dnn.readNetFromCaffe(
         "deploy.prototxt.txt", "res10_300x300_ssd_iter_140000.caffemodel")
     h, w = img.shape[:2]
@@ -931,8 +931,8 @@ def F_faceDetect(event):
     img_reply(uploadIMG("face.png"), event)
 
 
-def F_oppaiDetect(event):
-    img = cv2.imread("IMG.png")
+def F_oppaiDetect(event,id):
+    img = cv2.imread(f"{id}.png")
     color = (0, 255, 0)
     grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     oppai_classifier = cv2.CascadeClassifier('./xml/cascade_oppai.xml')
@@ -945,18 +945,18 @@ def F_oppaiDetect(event):
     img_reply(uploadIMG("oppai.png"), event)
 
 
-def F_removeBG(event):
-    img = cv2.imread("IMG.png")
+def F_removeBG(event,id):
+    img = cv2.imread(f"{id}.png")
     segmentor = SelfiSegmentation()
     rBGimg = segmentor.removeBG(img, (255, 255, 255), threshold=0.99)
     cv2.imwrite("rBG.png", rBGimg)
     img_reply(uploadIMG("rBG.png"), event)
 
 
-def F_manga(event):
+def F_manga(event,id):
     th1 = 55
     th2 = 200
-    img = cv2.imread("IMG.png")
+    img = cv2.imread(f"{id}.png")
     blur = cv2.GaussianBlur(img, (0, 0), 10)
     img = cv2.addWeighted(img, 1.5, blur, -0.5, 0)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
