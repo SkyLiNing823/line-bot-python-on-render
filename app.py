@@ -178,7 +178,7 @@ def handle_message(event):
             📘 📘 📘 📘 📒
             x1🔮 x1🔮 x1🔮 x1🔮 x1🔮
             x1🔮 x1🔮 x1🔮 x1🔮 x10🔮
-            ''')
+            ''', event)
 
     if get_message[:2] == '!抽':
         F_lottery(jdata, group_id, split, event)
