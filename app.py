@@ -165,20 +165,8 @@ def handle_message(event):
             img_reply(
                 'https://media.discordapp.net/attachments/856516846144192543/1069646767248920590/S__31596567.jpg', event)
         elif n == 3:
-            text_reply('''
-            -1200💎
-
-            ✉️
-            🙌
-            😆
-
-            📄
-
-            📘 📘 📘 📘 📘
-            📘 📘 📘 📘 📒
-            x1🔮 x1🔮 x1🔮 x1🔮 x1🔮
-            x1🔮 x1🔮 x1🔮 x1🔮 x10🔮
-            ''', event)
+            text_reply(
+                '-1200💎\n\n✉️\n🙌\n😆\n\n📄\n\n📘 📘 📘 📘 📘\n📘 📘 📘 📘 📒\nx1🔮 x1🔮 x1🔮 x1🔮 x1🔮\nx1🔮 x1🔮 x1🔮 x1🔮 x10🔮', event)
 
     if get_message[:2] == '!抽':
         F_lottery(jdata, group_id, split, event)
