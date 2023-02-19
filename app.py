@@ -278,6 +278,12 @@ def handle_message(event):
             F_faceDetect(event, id)
         else:
             F_faceDetect(event, group_id)
+    
+    if l_get_message.lower() == '!狼師':
+        if group_id == 'N/A':
+            F_teacherReplace(event, id)
+        else:
+            F_teacherReplace(event, group_id)
 
     if l_get_message.lower() == '!oppai':
         if group_id == 'N/A':

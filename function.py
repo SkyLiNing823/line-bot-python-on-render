@@ -930,6 +930,30 @@ def F_faceDetect(event, id):
     img_reply(uploadIMG("face.png"), event)
 
 
+def F_teacherReplace(event, id):
+    img = cv2.imread(f"{id}.png")
+    net = cv2.dnn.readNetFromCaffe(
+        "deploy.prototxt.txt", "res10_300x300_ssd_iter_140000.caffemodel")
+    h, w = img.shape[:2]
+    blob = cv2.dnn.blobFromImage(cv2.resize(
+        img, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    net.setInput(blob)
+    detections = net.forward()
+    for i in range(0, detections.shape[2]):
+        img2 = cv2.imread("teacher.jpg")
+        confidence = detections[0, 0, i, 2]
+        if confidence < 0.5:
+            continue
+        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+        (startX, startY, endX, endY) = box.astype("int")
+        print(startX, startY, endX, endY)
+        img2 = cv2.resize(img2, (endX-startX, endY-startY),
+                          interpolation=cv2.INTER_AREA)
+        img[startY:endY, startX:endX] = img2
+    cv2.imwrite("teacherface.png", img)
+    img_reply(uploadIMG("teacherface.png"), event)
+
+
 def F_oppaiDetect(event, id):
     img = cv2.imread(f"{id}.png")
     color = (0, 255, 0)
