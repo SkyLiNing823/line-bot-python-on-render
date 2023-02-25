@@ -96,6 +96,17 @@ def flex_reply(words, content, event):
         event.reply_token, reply)
 
 
+def img_save(url, event):
+    try:
+        id = event.source.group_id
+    except:
+        id = event.source.user_id
+    PATH = f'{id}.png'
+    response = requests.get(url)
+    with open(PATH, "wb") as f:
+        f.write(response.content)
+
+
 def F_sound2text(event):
     PATH = 'tmp.mp3'
     audio_content = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
@@ -388,11 +399,11 @@ def F_imgSearch(split, jdata, get_message, event):
         with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
             jdata = json.load(jfile)
         ctn = []
+        img_save(URL_list[-1], event)
         for i in range(n):
             tmp = copy.deepcopy(jdata)
             tmp['hero']['url'] = tmp['hero']['action']['uri'] = URL_list[i]
             ctn.append(tmp)
-
         if len(ctn) > 1:
             with open('json/carousel.json', 'r', encoding='utf8') as jfile:
                 jdataCtn = json.load(jfile)
@@ -664,6 +675,7 @@ def F_twitterPreview(get_message, event):
         with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
             jdata2 = json.load(jfile)
         if 'media' in tweet.entities:
+            img_url = ''
             for media in tweet.extended_entities['media']:
                 tmp = copy.deepcopy(jdata2)
                 if('https' not in media['media_url']):
@@ -671,7 +683,9 @@ def F_twitterPreview(get_message, event):
                         'http', 'https')
                 else:
                     tmp['hero']['url'] = tmp['hero']['action']['uri'] = media['media_url']
+                img_url = tmp['hero']['url']
                 ctn.append(tmp)
+            img_save(img_url, event)
         if len(ctn) > 1:
             with open('json/carousel.json', 'r', encoding='utf8') as jfile:
                 jdata = json.load(jfile)
