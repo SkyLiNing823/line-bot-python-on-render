@@ -24,6 +24,7 @@ import cv2
 import numpy as np
 # from imageai.Detection import ObjectDetection
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
+from saucenao_api import SauceNao
 # from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
@@ -990,6 +991,16 @@ def F_manga(event, id):
     img = cv2.addWeighted(img, 1.5, blur, -0.5, 0)
     cv2.imwrite("MANGA.png", img)
     img_reply(uploadIMG("MANGA.png"), event)
+
+
+def F_searchByIMG(event, id):
+    sauce = SauceNao(os.getenv('SauceNao', None))
+    results = sauce.from_url(uploadIMG(f"{id}.png"))
+    times = len(results) if len(results) < 3 else 3
+    reply = ''
+    for i in range(times):
+        reply += f'{results[i].title}\n{results[i].similarity}\n{results[i].urls}\n\n\n'
+    text_reply(reply, event)
 
 
 def F_vote(event):

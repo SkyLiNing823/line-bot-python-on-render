@@ -278,7 +278,7 @@ def handle_message(event):
             F_faceDetect(event, id)
         else:
             F_faceDetect(event, group_id)
-    
+
     if l_get_message.lower() == '!狼師':
         if group_id == 'N/A':
             F_teacherReplace(event, id)
@@ -308,6 +308,9 @@ def handle_message(event):
             text_reply(uploadIMG(f"{id}.jpg"), event)
         else:
             text_reply(uploadIMG(f"{group_id}.jpg"), event)
+
+    if l_get_message.lower() == '!f':
+        F_searchByIMG(event, id)
 
     if get_message[:5].lower() == '!vote':
         F_vote(event)
