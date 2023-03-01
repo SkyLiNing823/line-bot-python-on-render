@@ -1020,10 +1020,10 @@ def F_searchByIMG(id, x):
             else:
                 reply += f'{results[i].title}\n{results[i].similarity}\n\n\n'
     else:
-        if len(results[i].urls) > 0:
-            reply = f'{results[i].title}\n{results[i].urls[0]}'
+        if len(results[0].urls) > 0:
+            reply = f'{results[0].title}\n{results[0].urls[0]}'
         else:
-            reply = results[i].title
+            reply = results[0].title
     return reply
 
 
