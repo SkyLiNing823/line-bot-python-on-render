@@ -1016,9 +1016,9 @@ def F_searchByIMG(id, x):
         times = x if len(results) >= x else len(results)
         for i in range(times):
             if len(results[i].urls) > 0:
-                reply += f'{results[i].title}\n{results[i].similarity}\n{results[i].urls[0]}\n\n\n'
+                reply += f'{results[i].title}\n{results[i].urls[0]}\n\n\n'
             else:
-                reply += f'{results[i].title}\n{results[i].similarity}\n\n\n'
+                reply += f'{results[i].title}\n\n\n'
     else:
         if len(results[0].urls) > 0:
             reply = f'{results[0].title}\n{results[0].urls[0]}'
