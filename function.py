@@ -1007,14 +1007,24 @@ def F_manga(event, id):
     img_reply(uploadIMG("MANGA.png"), event)
 
 
-def F_searchByIMG(event, id):
+def F_searchByIMG(id, x):
     sauce = SauceNao(os.getenv('SauceNao', None))
     results = sauce.from_url(uploadIMG(f"{id}.png"))
-    times = len(results) if len(results) < 3 else 3
     reply = ''
-    for i in range(times):
-        reply += f'{results[i].title}\n{results[i].similarity}\n{results[i].urls}\n\n\n'
-    text_reply(reply, event)
+    if x.isdigit():
+        x = int(x)
+        times = x if len(results) >= x else len(results)
+        for i in range(times):
+            if len(results[i].urls) > 0:
+                reply += f'{results[i].title}\n{results[i].similarity}\n{results[i].urls[0]}\n\n\n'
+            else:
+                reply += f'{results[i].title}\n{results[i].similarity}\n\n\n'
+    else:
+        if len(results[i].urls) > 0:
+            reply = f'{results[i].title}\n{results[i].urls[0]}'
+        else:
+            reply = results[i].title
+    return reply
 
 
 def F_vote(event):
