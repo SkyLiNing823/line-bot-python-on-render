@@ -313,7 +313,7 @@ def handle_message(event):
         if group_id == 'N/A':
             text_reply(F_searchByIMG(id, split[-1]), event)
         else:
-            text_reply(F_searchByIMG(id, split[-1]), event)
+            text_reply(F_searchByIMG(group_id, split[-1]), event)
 
     if get_message[:5].lower() == '!vote':
         F_vote(event)
