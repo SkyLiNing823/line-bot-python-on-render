@@ -313,8 +313,9 @@ def F_TTS(get_message, event):
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
         tts.save("tmp.m4a")
     data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
+    URL = data['url']
     print(data['url'])
-    audio_reply(str(data['url']), event)
+    audio_reply(URL, event)
 
 
 def F_eval(get_message, event):
