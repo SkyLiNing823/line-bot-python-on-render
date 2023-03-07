@@ -311,10 +311,10 @@ def F_TTS(get_message, event):
     else:
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
-        tts.save("tmp.m4a")
-    data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
-    URL = data['proxy_url']
-    print(data['proxy_url'])
+        tts.save("tmp.mp3")
+    data = pyscord_storage.upload('tmp.mp3', 'tmp.mp3')['data']
+    URL = data['url']
+    print(data['url'])
     audio_reply(URL, event)
 
 
