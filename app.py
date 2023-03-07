@@ -309,7 +309,7 @@ def handle_message(event):
         else:
             text_reply(uploadIMG(f"{group_id}.png"), event)
 
-    if l_get_message[:2].lower() == '!f':
+    if split[0].lower() == '!f':
         if group_id == 'N/A':
             text_reply(F_searchByIMG(id, split[-1]), event)
         else:
