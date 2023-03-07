@@ -304,7 +304,7 @@ def F_TTS(get_message, event):
     if get_message.split()[1] in ['?', '？']:
         text_reply(str(gtts.lang.tts_langs()), event)
         return
-    elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()):
+    elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()) and len(get_message.split()) > 2:
         LAN = get_message.split()[1].lower()
         tts = gtts.gTTS(text=get_message[8:], lang=LAN)
         tts.save("tmp.m4a")
@@ -313,8 +313,8 @@ def F_TTS(get_message, event):
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
         tts.save("tmp.m4a")
     data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
-    URL = data['url']
-    print(data['url'])
+    URL = data['proxy_url']
+    print(data['proxy_url'])
     audio_reply(URL, event)
 
 
