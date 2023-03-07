@@ -305,9 +305,9 @@ def handle_message(event):
 
     if l_get_message.lower() == '!img':
         if group_id == 'N/A':
-            text_reply(uploadIMG(f"{id}.jpg"), event)
+            text_reply(uploadIMG(f"{id}.png"), event)
         else:
-            text_reply(uploadIMG(f"{group_id}.jpg"), event)
+            text_reply(uploadIMG(f"{group_id}.png"), event)
 
     if l_get_message[:2].lower() == '!f':
         if group_id == 'N/A':

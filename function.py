@@ -19,12 +19,13 @@ import pyimgur
 import matplotlib.pyplot as plt
 import speech_recognition as sr
 from pydub import AudioSegment
-from gtts import gTTS
+import gtts
 import cv2
 import numpy as np
 # from imageai.Detection import ObjectDetection
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
 from saucenao_api import SauceNao
+import pyscord_storage
 # from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
@@ -300,11 +301,19 @@ def F_translate(get_message, split, event):
 
 
 def F_TTS(get_message, event):
-    tts = gTTS(text=get_message[5:], lang='zh-tw')
-    # tts.save("tmp.m4a")
-    #URL = 'https://skylinebot823.herokuapp.com/tmp.m4a'
-    URL = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=zh&client=tw-ob&q=${get_message[5:]}'
-    audio_reply(URL, event)
+    if get_message.split()[1] == '?':
+        text_reply(gtts.lang.tts_langs(), event)
+        return
+    elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()):
+        LAN = get_message.split()[1].lower()
+        tts = gtts.gTTS(text=get_message[8:], lang=LAN)
+        tts.save("tmp.m4a")
+    else:
+        LAN = 'zh-tw'
+        tts = gtts.gTTS(text=get_message[5:], lang=LAN)
+        tts.save("tmp.m4a")
+    data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
+    audio_reply(data['url'], event)
 
 
 def F_eval(get_message, event):
