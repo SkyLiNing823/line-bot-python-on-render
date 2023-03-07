@@ -144,6 +144,10 @@ def handle_message(event):
     if split[0].lower() == '!tts':
         F_TTS(get_message, event)
 
+    if split[0].lower() == '!tt':
+        audio_reply(
+            'https://cdn.discordapp.com/attachments/866565785982861322/1082691272051011675/tmp.m4a', event)
+
     if get_message[0].isdigit() and get_message[-1].isdigit():
         F_eval(get_message, event)
 
