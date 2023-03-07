@@ -79,7 +79,7 @@ def img_reply(URL, event):
 
 def audio_reply(URL, event):
     reply = AudioSendMessage(
-        original_content_url=URL, duration=100000)
+        original_content_url=URL, duration=240000)
     LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
@@ -302,7 +302,7 @@ def F_translate(get_message, split, event):
 
 def F_TTS(get_message, event):
     if get_message.split()[1] in ['?', '？']:
-        text_reply(gtts.lang.tts_langs(), event)
+        text_reply(str(gtts.lang.tts_langs()), event)
         return
     elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()):
         LAN = get_message.split()[1].lower()
@@ -314,7 +314,7 @@ def F_TTS(get_message, event):
         tts.save("tmp.m4a")
     data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
     print(data['url'])
-    audio_reply(data['url'], event)
+    audio_reply(str(data['url']), event)
 
 
 def F_eval(get_message, event):
