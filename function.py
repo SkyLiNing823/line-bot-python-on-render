@@ -382,6 +382,7 @@ def F_lottery(jdata, group_id, split, event):
 def F_imgSearch(split, jdata, get_message, event):
     if split[-1].isdigit():
         n = int(split[-1])
+        get_message = get_message[:-len(split[-1])]
         if(n > 10):
             n = 10
     else:
@@ -392,7 +393,7 @@ def F_imgSearch(split, jdata, get_message, event):
         "tbm": "isch"
     }
     try:
-        params['q'] = get_message[:-2]
+        params['q'] = get_message[:-4]
         params['api_key'] = random.choice(jdata['serpapi_key'])
         client = GoogleSearch(params)
         data = client.get_dict()
