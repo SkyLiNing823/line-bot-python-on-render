@@ -141,26 +141,26 @@ def handle_message(event):
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)
 
-    if split[0].lower() == '!tts':
+    elif split[0].lower() == '!tts':
         F_TTS(get_message, event)
 
-    if split[0].lower() == '!tt':
+    elif split[0].lower() == '!tt':
         audio_reply(
             'https://cdn.discordapp.com/attachments/866565785982861322/1082691272051011675/tmp.m4a', event)
 
-    if get_message[0].isdigit() and get_message[-1].isdigit():
+    elif get_message[0].isdigit() and get_message[-1].isdigit():
         F_eval(get_message, event)
 
-    if get_message == '!irin':
+    elif get_message == '!irin':
         random_pic = random.choice(jdata['irin_pic'])
         img_reply(random_pic, event)
 
-    if get_message == '!刑安':
+    elif get_message == '!刑安':
         print(event)
         random_pic = random.choice(jdata['刑安_pic'])
         img_reply(random_pic, event)
 
-    if get_message == '!抽卡':
+    elif get_message == '!抽卡':
         n = random.randint(1, 3)
         if n == 1:
             img_reply(
@@ -172,32 +172,32 @@ def handle_message(event):
             text_reply(
                 '-1200💎\n\n✉️\n🙌\n😆\n\n📄\n\n📘 📘 📘 📘 📘\n📘 📘 📘 📘 📒\nx1🔮 x1🔮 x1🔮 x1🔮 x1🔮\nx1🔮 x1🔮 x1🔮 x1🔮 x10🔮', event)
 
-    if get_message[:2] == '!抽':
+    elif get_message[:2] == '!抽':
         F_lottery(jdata, group_id, split, event)
 
-    if '.jpg' in get_message.lower() or '.png' in get_message.lower():
+    elif '.jpg' in get_message.lower() or '.png' in get_message.lower():
         F_imgSearch(split, jdata, get_message, event)
 
-    if get_message[:3].lower() == '!yt':
+    elif get_message[:3].lower() == '!yt':
         F_ytSearch(split, get_message, jdata, event)
 
-    if get_message[:2].lower() == '!s' or get_message[:4] == '有人知道' or (get_message[:1] == '教' and get_message[-1:] == '嗎' and len(get_message) > 2):
+    elif get_message[:2].lower() == '!s' or get_message[:4] == '有人知道' or (get_message[:1] == '教' and get_message[-1:] == '嗎' and len(get_message) > 2):
         F_GoogleSearch(get_message, event)
 
-    if get_message[:26] == 'https://www.instagram.com/':
+    elif get_message[:26] == 'https://www.instagram.com/':
         pass
 
-    if split[0] == '!tmr':
-        F_tmr(send_headers, split, event)
+    # elif split[0] == '!tmr':
+    #     F_tmr(send_headers, split, event)
 
-    if get_message[:3].lower() == '!nh':
+    elif get_message[:3].lower() == '!nh':
         F_nh(split, get_message, event)
 
-    if get_message == '!戴男':
+    elif get_message == '!戴男':
         rand_voice = random.choice(jdata['dai_voice'])
         audio_reply(rand_voice, event)
 
-    if get_message[:5] == '!echo':
+    elif get_message[:5] == '!echo':
         text_reply(get_message[6:], event)
 
     elif get_message[:4] != 'http':
@@ -205,7 +205,9 @@ def handle_message(event):
         if '機器人' in get_message or 'bot' in get_message:
             for i in jdata['abuse_words']:
                 if i in get_message:
-                    text_reply(user_name+'兇三小 家裡死人喔 = =', event)
+                    L = ['兇三小 幹', '家裡死人嗎？', '是在叫三小', '靠北啥？']
+                    word = random.choice(L)
+                    text_reply(user_name+word, event)
             for i in jdata['praise_words']:
                 if i in get_message:
                     img_reply(
@@ -225,11 +227,11 @@ def handle_message(event):
                 text_reply(get_message, event)
                 break
 
-        for i in jdata['china_words']:
-            if i in get_message:
-                random_pic = random.choice(jdata['chPolice_pic'])
-                img_reply(random_pic, event)
-                break
+        # for i in jdata['china_words']:
+        #     if i in get_message:
+        #         random_pic = random.choice(jdata['chPolice_pic'])
+        #         img_reply(random_pic, event)
+        #         break
 
         for i in jdata['full_echo_words']:
             if i == get_message:
@@ -242,7 +244,14 @@ def handle_message(event):
 
         if '我' in get_message:
             if '不會' in get_message and len(get_message) < 20:
-                text_reply('哈哈你又不會了', event)
+                L = ['哈哈你又不會了', '你要確定ㄋㄟ', '真假', '喔是喔，真的假的，55555', '好了啦']
+                word = random.choice(L)
+                text_reply(word, event)
+
+        if '我寶寶' in get_message:
+            L = ['恩', '喔是喔，真的假的，55555', 'ㄏ', '好了啦', '多出去走走', '有點可憐', '啊哈哈']
+            word = random.choice(L)
+            text_reply(word, event)
 
         if '教嗎' in get_message or '教嘛' in get_message or '教？' in get_message or '教?' in get_message:
             text_reply('不要嘲諷好嗎', event)
@@ -253,84 +262,84 @@ def handle_message(event):
         if '一生' in get_message and '推' in get_message and '不' not in get_message:
             text_reply(user_name+'你真可憐', event)
 
-    if l_get_message[:17] == 'https://youtu.be/' or l_get_message[:24] == 'https://www.youtube.com/' or l_get_message[:22] == "https://m.youtube.com/":
+    elif l_get_message[:17] == 'https://youtu.be/' or l_get_message[:24] == 'https://www.youtube.com/' or l_get_message[:22] == "https://m.youtube.com/":
         F_ytPreview(l_get_message, jdata, event)
 
-    if 'ptt' in get_message and '不印出' not in get_message:
+    elif 'ptt' in get_message and '不印出' not in get_message:
         F_pttPreview(get_message, event)
 
-    if 'twitter.com' in get_message:
+    elif 'twitter.com' in get_message:
         F_twitterPreview(get_message, event)
 
-    if 'forum.gamer.com.tw' in get_message:
+    elif 'forum.gamer.com.tw' in get_message:
         F_bahamutePreview(get_message, event)
 
-    if 'home.gamer.com.tw' in get_message:
+    elif 'home.gamer.com.tw' in get_message:
         F_bahamuteHomePreview(get_message, event)
 
-    if get_message[:5] == '!rand':
+    elif get_message[:5] == '!rand':
         F_randnum(get_message, event)
 
-    if get_message[:5] == '!rate':
+    elif get_message[:5] == '!rate':
         F_rate(get_message, send_headers, event)
 
     # if l_get_message.lower() == '!od':
     #     F_objectDetect(event)
 
-    if l_get_message.lower() == '!face':
+    elif l_get_message.lower() == '!face':
         if group_id == 'N/A':
             F_faceDetect(event, id)
         else:
             F_faceDetect(event, group_id)
 
-    if l_get_message.lower() == '!狼師':
+    elif l_get_message.lower() == '!狼師':
         if group_id == 'N/A':
             F_teacherReplace(event, id)
         else:
             F_teacherReplace(event, group_id)
 
-    if l_get_message.lower() == '!oppai':
+    elif l_get_message.lower() == '!oppai':
         if group_id == 'N/A':
             F_oppaiDetect(event, id)
         else:
             F_oppaiDetect(event, group_id)
 
-    if l_get_message.lower() == '!rbg':
+    elif l_get_message.lower() == '!rbg':
         if group_id == 'N/A':
             F_removeBG(event, id)
         else:
             F_removeBG(event, group_id)
 
-    if l_get_message.lower() == '!manga':
+    elif l_get_message.lower() == '!manga':
         if group_id == 'N/A':
             F_manga(event, id)
         else:
             F_manga(event, group_id)
 
-    if l_get_message.lower() == '!img':
+    elif l_get_message.lower() == '!img':
         if group_id == 'N/A':
             text_reply(uploadIMG(f"{id}.png"), event)
         else:
             text_reply(uploadIMG(f"{group_id}.png"), event)
 
-    if split[0].lower() == '!f':
+    elif split[0].lower() == '!f':
         if group_id == 'N/A':
             text_reply(F_searchByIMG(id, split[-1]), event)
         else:
             text_reply(F_searchByIMG(group_id, split[-1]), event)
 
-    if get_message[:5].lower() == '!vote':
+    elif get_message[:5].lower() == '!vote':
         F_vote(event)
 
-    if get_message.lower() == '!history':
+    elif get_message.lower() == '!history':
         F_history(event)
 
-    if ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
+    elif ('line' in get_message.lower() or '賴' in get_message) and '怒' in get_message:
         with open('previous_user_name.txt', 'r') as f:
             previous_user_name = f.read()
         text_reply(f'@{previous_user_name} 😡', event)
 
-    if Message_counter == 2:
+    if Message_counter == 3:
         text_reply(Message_container, event)
 
     sheet, bully_names, bully_p, bully_words = bully_reload()
