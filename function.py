@@ -711,6 +711,14 @@ def F_twitterPreview(get_message, event):
     line_reply(msg, event)
 
 
+def F_pixivPreview(get_message, event):
+    pass
+    # ID = get_message.split('/')[-1]
+    # api = AppPixivAPI()
+    # json_result = api.illust_detail(ID)
+    # URL = json_result.image_urls['large']
+
+
 def bahaLogin():
     rs = requests.session()
     data = {

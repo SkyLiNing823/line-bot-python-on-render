@@ -252,7 +252,6 @@ def handle_message(event):
             L = ['恩', '喔是喔，真的假的，55555', 'ㄏ', '好了啦', '多出去走走', '有點可憐', '啊哈哈']
             word = random.choice(L)
             text_reply(word, event)
-
         if '教嗎' in get_message or '教嘛' in get_message or '教？' in get_message or '教?' in get_message:
             text_reply('不要嘲諷好嗎', event)
 
@@ -271,8 +270,11 @@ def handle_message(event):
     elif 'twitter.com' in get_message:
         F_twitterPreview(get_message, event)
 
-    elif 'forum.gamer.com.tw' in get_message:
-        F_bahamutePreview(get_message, event)
+    elif 'pixiv.net' in get_message:
+        F_pixivPreview(get_message, event)
+
+    # elif 'forum.gamer.com.tw' in get_message:
+    #     F_bahamutePreview(get_message, event)
 
     elif 'home.gamer.com.tw' in get_message:
         F_bahamuteHomePreview(get_message, event)
