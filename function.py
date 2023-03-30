@@ -352,7 +352,7 @@ def F_TTS(get_message, event):
         duration = int(f.duration) * 1000
     data = pyscord_storage.upload('tmp.mp3', 'tmp.mp3')['data']
     URL = data['url']
-    print(data['url'])
+    # print(data['url'])
     audio_reply(URL, duration, event)
 
 
