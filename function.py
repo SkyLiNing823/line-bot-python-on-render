@@ -303,15 +303,27 @@ def F_translate(get_message, split, event):
 
 
 def F_TTS(get_message, event):
+    VoiceDict = {'mika': 65, 'ミカ': 65,
+                 'miyu': 70, 'ミユ': 70,
+                 'karin': 75, 'カリン': 75,
+                 'asuna': 80, 'アスナ': 80,
+                 'azusa': 85, 'アズサ': 85,
+                 'alice': 90, 'アリス': 90,
+                 'shiroko': 95, 'シロコ': 95,
+                 'hoshino': 100, 'ホシノ': 100,
+                 'hina': 105, 'ヒナ': 105,
+                 'iori': 110, 'イオリ': 110,
+                 'izuna': 115, 'イズナ': 115,
+                 'yuuka': 120, 'ユウカ': 120}
     if get_message.split()[1] in ['?', '？']:
         text_reply(str(gtts.lang.tts_langs()), event)
         return
-    elif get_message.split()[1] in ['星野', '大叔', 'hoshino']:
+    elif get_message.split()[1].lower() in VoiceDict.keys():
         uri = 'wss://vocal.dvd.moe/queue/join'
         ws = websocket.create_connection(uri, timeout=10)
         LAN = 'Japanese'
         message1 = {"session_hash": "iohm2xkgjq", "fn_index": 0}
-        message2 = {"fn_index": 100, "data": [get_message[len(get_message.split(
+        message2 = {"fn_index": VoiceDict[get_message.split()[1].lower()], "data": [get_message[len(get_message.split(
         )[0])+len(get_message.split()[1])+2:], LAN, 0.6, 0.668, 1, False], "session_hash": "iohm2xkgjq"}
         message1 = json.dumps(message1)
         message2 = json.dumps(message2)
