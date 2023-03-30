@@ -28,6 +28,7 @@ from saucenao_api import SauceNao
 import pyscord_storage
 import websocket
 import base64
+import audioread
 # from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
@@ -79,9 +80,9 @@ def img_reply(URL, event):
                ).reply_message(event.reply_token, reply)
 
 
-def audio_reply(URL, event):
+def audio_reply(URL, duration, event):
     reply = AudioSendMessage(
-        original_content_url=URL, duration=240000)
+        original_content_url=URL, duration=duration)
     LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
                ).reply_message(event.reply_token, reply)
 
@@ -347,10 +348,12 @@ def F_TTS(get_message, event):
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
         tts.save("tmp.mp3")
+    with audioread.audio_open('tmp.mp3') as f:
+        duration = int(f.duration) * 1000
     data = pyscord_storage.upload('tmp.mp3', 'tmp.mp3')['data']
     URL = data['url']
     print(data['url'])
-    audio_reply(URL, event)
+    audio_reply(URL, duration, event)
 
 
 def F_eval(get_message, event):
