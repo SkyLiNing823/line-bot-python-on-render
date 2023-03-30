@@ -26,6 +26,8 @@ import numpy as np
 from cvzone.SelfiSegmentationModule import SelfiSegmentation
 from saucenao_api import SauceNao
 import pyscord_storage
+import websocket
+import base64
 # from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
@@ -304,6 +306,27 @@ def F_TTS(get_message, event):
     if get_message.split()[1] in ['?', '？']:
         text_reply(str(gtts.lang.tts_langs()), event)
         return
+    elif get_message.split()[1] in ['星野', '大叔', 'hoshino']:
+        uri = 'wss://vocal.dvd.moe/queue/join'
+        ws = websocket.create_connection(uri, timeout=10)
+        message1 = {"session_hash": "iohm2xkgjq", "fn_index": 0}
+        message2 = {"fn_index": 100, "data": ["それに新しいお菓子屋さんも出来てみんな買いものを楽しんでいます！",
+                                              "Japanese", 0.6, 0.668, 1, False], "session_hash": "iohm2xkgjq"}
+        message1 = json.dumps(message1)
+        message2 = json.dumps(message2)
+        ws.send(message1)
+        ws.send(message2)
+        while True:
+            result = ws.recv()
+            print(result)
+            results = json.loads(result)
+            if 'Success' in result:
+                break
+        data = results['output']['data'][1].split(',')[1]
+        decoded_data = base64.b64decode(bytes(data, encoding='utf-8'))
+        print(results['output']['data'][1])
+        with open('test.mp3', 'wb') as f:
+            f.write(decoded_data)
     elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()) and len(get_message.split()) > 2:
         LAN = get_message.split()[1].lower()
         tts = gtts.gTTS(text=get_message[8:], lang=LAN)
