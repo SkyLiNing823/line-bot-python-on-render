@@ -29,7 +29,6 @@ import pyscord_storage
 import websocket
 import base64
 import audioread
-# from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
 
