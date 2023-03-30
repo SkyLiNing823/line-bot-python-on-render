@@ -200,67 +200,6 @@ def handle_message(event):
     elif get_message[:5] == '!echo':
         text_reply(get_message[6:], event)
 
-    elif get_message[:4] != 'http':
-
-        if '機器人' in get_message or 'bot' in get_message:
-            for i in jdata['abuse_words']:
-                if i in get_message:
-                    L = ['兇三小 幹', '家裡死人嗎？', '是在叫三小', '靠北啥？']
-                    word = random.choice(L)
-                    text_reply(user_name+word, event)
-            for i in jdata['praise_words']:
-                if i in get_message:
-                    img_reply(
-                        'https://cdn.discordapp.com/attachments/856516846144192543/863114640345923604/image0.png', event)
-
-        for i in jdata['echo_words']:
-            if i in get_message:
-                if get_message[0] == '我':
-                    get_message = get_message.replace('我', '你')
-                if "不會" not in get_message:
-                    get_message = get_message.replace('會', '才會')
-                if "會不會" not in get_message:
-                    get_message = get_message.replace('會不會', '才會')
-                if "你是" in get_message or "妳是" in get_message:
-                    get_message = get_message.replace('是', '才是')
-                    get_message = get_message.replace('才是不才是', '才是')
-                text_reply(get_message, event)
-                break
-
-        # for i in jdata['china_words']:
-        #     if i in get_message:
-        #         random_pic = random.choice(jdata['chPolice_pic'])
-        #         img_reply(random_pic, event)
-        #         break
-
-        for i in jdata['full_echo_words']:
-            if i == get_message:
-                text_reply(get_message, event)
-                break
-
-        if '買' in get_message:
-            if '會員' in get_message:
-                text_reply('買 我叫你買', event)
-
-        if '我' in get_message:
-            if '不會' in get_message and len(get_message) < 20:
-                L = ['哈哈你又不會了', '你要確定ㄋㄟ', '真假', '喔是喔，真的假的，55555', '好了啦']
-                word = random.choice(L)
-                text_reply(word, event)
-
-        if '我寶寶' in get_message:
-            L = ['恩', '喔是喔，真的假的，55555', 'ㄏ', '好了啦', '多出去走走', '有點可憐', '啊哈哈']
-            word = random.choice(L)
-            text_reply(word, event)
-        if '教嗎' in get_message or '教嘛' in get_message or '教？' in get_message or '教?' in get_message:
-            text_reply('不要嘲諷好嗎', event)
-
-        if '加推' in get_message or '我婆' in get_message:
-            text_reply('又？', event)
-
-        if '一生' in get_message and '推' in get_message and '不' not in get_message:
-            text_reply(user_name+'你真可憐', event)
-
     elif l_get_message[:17] == 'https://youtu.be/' or l_get_message[:24] == 'https://www.youtube.com/' or l_get_message[:22] == "https://m.youtube.com/":
         F_ytPreview(l_get_message, jdata, event)
 
@@ -340,6 +279,67 @@ def handle_message(event):
         with open('previous_user_name.txt', 'r') as f:
             previous_user_name = f.read()
         text_reply(f'@{previous_user_name} 😡', event)
+
+    elif get_message[:4] != 'http':
+
+        if '機器人' in get_message or 'bot' in get_message:
+            for i in jdata['abuse_words']:
+                if i in get_message:
+                    L = ['兇三小 幹', '家裡死人嗎？', '是在叫三小', '靠北啥？']
+                    word = random.choice(L)
+                    text_reply(user_name+word, event)
+            for i in jdata['praise_words']:
+                if i in get_message:
+                    img_reply(
+                        'https://cdn.discordapp.com/attachments/856516846144192543/863114640345923604/image0.png', event)
+
+        for i in jdata['echo_words']:
+            if i in get_message:
+                if get_message[0] == '我':
+                    get_message = get_message.replace('我', '你')
+                if "不會" not in get_message:
+                    get_message = get_message.replace('會', '才會')
+                if "會不會" not in get_message:
+                    get_message = get_message.replace('會不會', '才會')
+                if "你是" in get_message or "妳是" in get_message:
+                    get_message = get_message.replace('是', '才是')
+                    get_message = get_message.replace('才是不才是', '才是')
+                text_reply(get_message, event)
+                break
+
+        # for i in jdata['china_words']:
+        #     if i in get_message:
+        #         random_pic = random.choice(jdata['chPolice_pic'])
+        #         img_reply(random_pic, event)
+        #         break
+
+        for i in jdata['full_echo_words']:
+            if i == get_message:
+                text_reply(get_message, event)
+                break
+
+        if '買' in get_message:
+            if '會員' in get_message:
+                text_reply('買 我叫你買', event)
+
+        if '我' in get_message:
+            if '不會' in get_message and len(get_message) < 20:
+                L = ['哈哈你又不會了', '你要確定ㄋㄟ', '真假', '喔是喔，真的假的，55555', '好了啦']
+                word = random.choice(L)
+                text_reply(word, event)
+
+        if '我寶寶' in get_message:
+            L = ['恩', '喔是喔，真的假的，55555', 'ㄏ', '好了啦', '多出去走走', '有點可憐', '啊哈哈']
+            word = random.choice(L)
+            text_reply(word, event)
+        if '教嗎' in get_message or '教嘛' in get_message or '教？' in get_message or '教?' in get_message:
+            text_reply('不要嘲諷好嗎', event)
+
+        if '加推' in get_message or '我婆' in get_message:
+            text_reply('又？', event)
+
+        if '一生' in get_message and '推' in get_message and '不' not in get_message:
+            text_reply(user_name+'你真可憐', event)
 
     if Message_counter == 3:
         text_reply(Message_container, event)
