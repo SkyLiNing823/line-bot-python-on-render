@@ -309,10 +309,10 @@ def F_TTS(get_message, event):
     elif get_message.split()[1] in ['星野', '大叔', 'hoshino']:
         uri = 'wss://vocal.dvd.moe/queue/join'
         ws = websocket.create_connection(uri, timeout=10)
-        LANG = 'Japanese'
+        LAN = 'Japanese'
         message1 = {"session_hash": "iohm2xkgjq", "fn_index": 0}
         message2 = {"fn_index": 100, "data": [get_message[len(get_message.split(
-        )[0])+len(get_message.split()[1]+2):], LANG, 0.6, 0.668, 1, False], "session_hash": "iohm2xkgjq"}
+        )[0])+len(get_message.split()[1]+2):], LAN, 0.6, 0.668, 1, False], "session_hash": "iohm2xkgjq"}
         message1 = json.dumps(message1)
         message2 = json.dumps(message2)
         ws.send(message1)
