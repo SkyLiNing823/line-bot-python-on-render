@@ -346,7 +346,7 @@ def F_TTS(get_message, event):
     else:
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
-        tts.save("tmp.mp3")
+        tts.save("tmp.wav")
     with audioread.audio_open('tmp.wav') as f:
         duration = int(f.duration) * 1000
     data = pyscord_storage.upload('tmp.wav', 'tmp.wav')['data']
