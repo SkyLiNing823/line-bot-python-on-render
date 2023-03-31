@@ -342,7 +342,7 @@ def F_TTS(get_message, event):
     elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()) and len(get_message.split()) > 2:
         LAN = get_message.split()[1].lower()
         tts = gtts.gTTS(text=get_message[8:], lang=LAN)
-        tts.save("tmp.mp3")
+        tts.save("tmp.wav")
     else:
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
