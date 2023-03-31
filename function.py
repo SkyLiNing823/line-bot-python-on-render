@@ -336,7 +336,7 @@ def F_TTS(get_message, event):
                 break
         data = results['output']['data'][1].split(',')[1]
         decoded_data = base64.b64decode(data)
-        with open('tmp.m4a', 'wb') as f:
+        with open('tmp.wav', 'wb') as f:
             f.write(decoded_data)
 
     elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()) and len(get_message.split()) > 2:
@@ -347,9 +347,9 @@ def F_TTS(get_message, event):
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
         tts.save("tmp.wav")
-    with audioread.audio_open('tmp.m4a') as f:
+    with audioread.audio_open('tmp.wav') as f:
         duration = int(f.duration) * 1000
-    data = pyscord_storage.upload('tmp.m4a', 'tmp.m4a')['data']
+    data = pyscord_storage.upload('tmp.wav', 'tmp.wav')['data']
     URL = data['url']
     # print(data['url'])
     audio_reply(URL, duration, event)
