@@ -798,41 +798,41 @@ def F_bahamutePreview(get_message, event):
     gp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[0].text
     bp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[1].text
     rawCtn = bsObj.findAll('div', {'class': 'c-article__content'})[0]
-    ctn = rawCtn.findAll('div')
+    # ctn = rawCtn.findAll('div')
     article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
     article += f'樓主: {username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
-    last_url = []
-    last_ctn = ''
-    for row in ctn:
-        if row.text != last_ctn:
-            article += row.text
-        last_ctn = row.text
-        try:
-            block = rawCtn.findAll('a', {'target': '_blank'})
-            for url in block:
-                if url not in last_url:
-                    article += '\n'+url['href']+'\n'
-                last_url.append(url)
-        except:
-            pass
-        try:
-            block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
-            for url in block:
-                if url not in last_url:
-                    article += '\n'+url['href']+'\n'
-                last_url.append(url)
-        except:
-            pass
-        try:
-            url = row.find('iframe', {'class': 'lazyload'})['data-src']
-            if url not in last_url:
-                article += '\n'+url+'\n'
-            last_url.append(url)
-        except:
-            pass
-    if len(article) > 5000:
-        article = article[:5000]
+    # last_url = []
+    # last_ctn = ''
+    # for row in ctn:
+    #     if row.text != last_ctn:
+    #         article += row.text
+    #     last_ctn = row.text
+    #     try:
+    #         block = rawCtn.findAll('a', {'target': '_blank'})
+    #         for url in block:
+    #             if url not in last_url:
+    #                 article += '\n'+url['href']+'\n'
+    #             last_url.append(url)
+    #     except:
+    #         pass
+    #     try:
+    #         block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
+    #         for url in block:
+    #             if url not in last_url:
+    #                 article += '\n'+url['href']+'\n'
+    #             last_url.append(url)
+    #     except:
+    #         pass
+    #     try:
+    #         url = row.find('iframe', {'class': 'lazyload'})['data-src']
+    #         if url not in last_url:
+    #             article += '\n'+url+'\n'
+    #         last_url.append(url)
+    #     except:
+    #         pass
+    # if len(article) > 5000:
+    #     article = article[:5000]
     text_reply(article, event)
 
 
