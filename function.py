@@ -857,9 +857,11 @@ def F_bahamuteHomePreview(get_message, event):
     info = ctn[-1].text.split('\n')
     gp = info[1]
     collect = info[2]
-    article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
-    article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
-        '-'*len(title)+'\n\n'
+    article += '\n'+f'{title}\n\n'+'------\n\n' + \
+        f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n'
+    # article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
+    # article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
+    #     '-'*len(title)+'\n\n'
     last_url = []
     last_ctn = ''
     for row in ctn[:-1]:
