@@ -690,53 +690,48 @@ def F_pttPreview(get_message, event):
 
 
 def F_twitterPreview(get_message, event):
-    urlElement = get_message.split('/')
-    auth = tweepy.OAuthHandler(
-        os.getenv('TWITTER_APP_KEY', None), os.getenv('TWITTER_APP_SECRET', None))
-    auth.set_access_token(os.getenv('TWITTER_ACCESS_TOKEN', None), os.getenv(
-        'TWITTER_ACCESS_TOKEN_SECRET', None))
-    api = tweepy.API(auth)
-    tweet = api.get_status(urlElement[-1])
+    url = 'https://tweetpik.com/api/v2/tweets?url='+get_message
+    request = requests.get(url)
+    contents = request.text
+    username = contents[contents.find(
+        '"name":"')+len('"name":"'):contents.find('","handler":"')]
+    screen_name = contents[contents.find(
+        '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
+    profile_image_url = contents[contents.find(
+        '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('","textHtml":')]
+    tweet_text_HTML = contents[contents.find(
+        '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
+    bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
+    tweet_text = ''
+    for i in bsObj:
+        tweet_text += i.text
+    tweet_text = tweet_text.replace('\\n', '\n')
+    retweet_count = str(contents[contents.find(
+        '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
+    favorite_count = str(contents[contents.find(
+        ',"likes":')+len(',"likes":'):contents.find(',"retweets":')])
     with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
         jdata1 = json.load(jfile)
-    ctn = []
-    jdata1['body']['contents'][0]['url'] = tweet.user.profile_image_url.replace(
-        'http', 'https')
-    jdata1['body']['contents'][1]['text'] = tweet.user.name
-    jdata1['body']['contents'][2]['text'] = '@'+tweet.user.screen_name
-    jdata1['body']['contents'][3]['contents'][1]['text'] = str(
-        tweet.user.followers_count)
-    jdata1['body']['contents'][5]['contents'][0]['text'] = tweet.text
-    jdata1['body']['contents'][5]['contents'][2]['contents'][1]['text'] = str(
-        tweet.retweet_count)
-    jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = str(
-        tweet.favorite_count)
-    tweet = api.get_status(urlElement[-1], tweet_mode="extended")
     msg = []
-    msg.append(FlexSendMessage('tweet', jdata1))
-    try:
-        url = tweet.extended_entities["media"][0]["video_info"]["variants"][0]["url"].split('?')[
-            0]
-        url2 = tweet.extended_entities["media"][0]['media_url']
-        if('https' not in url2):
-            url2 = url2.replace('http', 'https')
-        msg.append(VideoSendMessage(
-            original_content_url=url, preview_image_url=url2))
-    except:
+    ctn = []
+    jdata1['body']['contents'][0]['url'] = profile_image_url
+    jdata1['body']['contents'][1]['text'] = username
+    jdata1['body']['contents'][2]['text'] = screen_name
+    jdata1['body']['contents'][3]['contents'][1]['text'] = 'N/A'
+    jdata1['body']['contents'][5]['contents'][0]['text'] = tweet_text
+    jdata1['body']['contents'][5]['contents'][2]['contents'][1]['text'] = retweet_count
+    jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = favorite_count
+    photos_urls = contents[contents.find(
+        '"photos":[')+len('"photos":['):contents.find('],"index":')].split(',')
+    if photos_urls[0] != '':
         with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
             jdata2 = json.load(jfile)
-        if 'media' in tweet.entities:
-            img_url = ''
-            for media in tweet.extended_entities['media']:
-                tmp = copy.deepcopy(jdata2)
-                if('https' not in media['media_url']):
-                    tmp['hero']['url'] = tmp['hero']['action']['uri'] = media['media_url'].replace(
-                        'http', 'https')
-                else:
-                    tmp['hero']['url'] = tmp['hero']['action']['uri'] = media['media_url']
-                img_url = tmp['hero']['url']
-                ctn.append(tmp)
-            img_save(img_url, event)
+        for i in range(len(photos_urls)):
+            tmp = copy.deepcopy(jdata2)
+            img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
+            tmp['hero']['url'] = img_url
+            ctn.append(tmp)
+        img_save(img_url, event)
         if len(ctn) > 1:
             with open('json/carousel.json', 'r', encoding='utf8') as jfile:
                 jdata = json.load(jfile)
@@ -745,8 +740,69 @@ def F_twitterPreview(get_message, event):
             msg.append(FlexSendMessage('tweet', reply))
         elif len(ctn) == 1:
             msg.append(ImageSendMessage(
-                original_content_url=media['media_url'].replace('http', 'https'), preview_image_url=media['media_url'].replace('http', 'https')))
+                original_content_url=img_url, preview_image_url=img_url))
+    else:
+        reply = jdata1
+        msg.append(FlexSendMessage('tweet', reply))
     line_reply(msg, event)
+    #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
+    # urlElement = get_message.split('/')
+    # auth = tweepy.OAuthHandler(
+    #     os.getenv('TWITTER_APP_KEY', None), os.getenv('TWITTER_APP_SECRET', None))
+    # auth.set_access_token(os.getenv('TWITTER_ACCESS_TOKEN', None), os.getenv(
+    #     'TWITTER_ACCESS_TOKEN_SECRET', None))
+    # api = tweepy.API(auth)
+    # tweet = api.get_status(urlElement[-1])
+    # with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
+    #     jdata1 = json.load(jfile)
+    # ctn = []
+    # jdata1['body']['contents'][0]['url'] = tweet.user.profile_image_url.replace(
+    #     'http', 'https')
+    # jdata1['body']['contents'][1]['text'] = tweet.user.name
+    # jdata1['body']['contents'][2]['text'] = '@'+tweet.user.screen_name
+    # jdata1['body']['contents'][3]['contents'][1]['text'] = str(
+    #     tweet.user.followers_count)
+    # jdata1['body']['contents'][5]['contents'][0]['text'] = tweet.text
+    # jdata1['body']['contents'][5]['contents'][2]['contents'][1]['text'] = str(
+    #     tweet.retweet_count)
+    # jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = str(
+    #     tweet.favorite_count)
+    # tweet = api.get_status(urlElement[-1], tweet_mode="extended")
+    # msg = []
+    # msg.append(FlexSendMessage('tweet', jdata1))
+    # try:
+    #     url = tweet.extended_entities["media"][0]["video_info"]["variants"][0]["url"].split('?')[
+    #         0]
+    #     url2 = tweet.extended_entities["media"][0]['media_url']
+    #     if('https' not in url2):
+    #         url2 = url2.replace('http', 'https')
+    #     msg.append(VideoSendMessage(
+    #         original_content_url=url, preview_image_url=url2))
+    # except:
+    #     with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
+    #         jdata2 = json.load(jfile)
+    #     if 'media' in tweet.entities:
+    #         img_url = ''
+    #         for media in tweet.extended_entities['media']:
+    #             tmp = copy.deepcopy(jdata2)
+    #             if('https' not in media['media_url']):
+    #                 tmp['hero']['url'] = tmp['hero']['action']['uri'] = media['media_url'].replace(
+    #                     'http', 'https')
+    #             else:
+    #                 tmp['hero']['url'] = tmp['hero']['action']['uri'] = media['media_url']
+    #             img_url = tmp['hero']['url']
+    #             ctn.append(tmp)
+    #         img_save(img_url, event)
+    #     if len(ctn) > 1:
+    #         with open('json/carousel.json', 'r', encoding='utf8') as jfile:
+    #             jdata = json.load(jfile)
+    #         jdata['contents'] = ctn
+    #         reply = jdata
+    #         msg.append(FlexSendMessage('tweet', reply))
+    #     elif len(ctn) == 1:
+    #         msg.append(ImageSendMessage(
+    #             original_content_url=media['media_url'].replace('http', 'https'), preview_image_url=media['media_url'].replace('http', 'https')))
+    # line_reply(msg, event)
 
 
 def F_pixivPreview(get_message, event):
