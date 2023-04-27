@@ -705,6 +705,8 @@ def F_twitterPreview(get_message, event):
     for i in bsObj:
         tweet_text += i.text
     tweet_text = tweet_text.replace('\\n', '\n')
+    if tweet_text == '':
+        tweet_text = ' '
     retweet_count = str(contents[contents.find(
         '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
     if retweet_count == 'null':
