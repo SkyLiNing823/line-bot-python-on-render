@@ -698,14 +698,15 @@ def F_twitterPreview(get_message, event):
         '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
     profile_image_url = contents[contents.find(
         '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
-    tweet_text_HTML = contents[contents.find(
-        '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
-    bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
-    tweet_text = ''
-    for i in bsObj:
-        tweet_text += i.text
-    tweet_text = tweet_text.replace('\\n', '\n')
-    if tweet_text == '':
+    if 'textHtml' in contents:
+        tweet_text_HTML = contents[contents.find(
+            '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
+        bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
+        tweet_text = ''
+        for i in bsObj:
+            tweet_text += i.text
+        tweet_text = tweet_text.replace('\\n', '\n')
+    else:
         tweet_text = ' '
     retweet_count = str(contents[contents.find(
         '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
