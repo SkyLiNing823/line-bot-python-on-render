@@ -729,6 +729,7 @@ def F_twitterPreview(get_message, event):
         for i in range(len(photos_urls)):
             tmp = copy.deepcopy(jdata2)
             img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
+            print(img_url)
             tmp['hero']['url'] = img_url
             ctn.append(tmp)
         img_save(img_url, event)
