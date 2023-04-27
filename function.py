@@ -707,8 +707,12 @@ def F_twitterPreview(get_message, event):
     tweet_text = tweet_text.replace('\\n', '\n')
     retweet_count = str(contents[contents.find(
         '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
+    if retweet_count == 'null':
+        retweet_count = '0'
     favorite_count = str(contents[contents.find(
         ',"likes":')+len(',"likes":'):contents.find(',"retweets":')])
+    if favorite_count == 'null':
+        favorite_count = '0'
     with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
         jdata1 = json.load(jfile)
     ctn = []
