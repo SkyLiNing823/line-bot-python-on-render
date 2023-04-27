@@ -711,7 +711,6 @@ def F_twitterPreview(get_message, event):
         ',"likes":')+len(',"likes":'):contents.find(',"retweets":')])
     with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
         jdata1 = json.load(jfile)
-    msg = []
     ctn = []
     jdata1['body']['contents'][0]['url'] = profile_image_url
     jdata1['body']['contents'][1]['text'] = username
@@ -722,6 +721,8 @@ def F_twitterPreview(get_message, event):
     jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = favorite_count
     photos_urls = contents[contents.find(
         '"photos":[')+len('"photos":['):contents.find('],"index":')].split(',')
+    msg = []
+    msg.append(FlexSendMessage('tweet', jdata1))
     if photos_urls[0] != '':
         with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
             jdata2 = json.load(jfile)
@@ -740,9 +741,6 @@ def F_twitterPreview(get_message, event):
         elif len(ctn) == 1:
             msg.append(ImageSendMessage(
                 original_content_url=img_url, preview_image_url=img_url))
-    else:
-        reply = jdata1
-        msg.append(FlexSendMessage('tweet', reply))
     line_reply(msg, event)
     #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
