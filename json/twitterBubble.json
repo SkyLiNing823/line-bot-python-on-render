@@ -26,26 +26,6 @@
                 "size": "xs"
             },
             {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [{
-                        "type": "text",
-                        "text": "",
-                        "size": "xxs",
-                        "color": "#aaaaaa"
-                    },
-                    {
-                        "type": "text",
-                        "text": "",
-                        "size": "xxs",
-                        "margin": "xxl"
-                    }
-                ],
-                "spacing": "none",
-                "margin": "none",
-                "width": "120px"
-            },
-            {
                 "type": "separator",
                 "margin": "xxl"
             },

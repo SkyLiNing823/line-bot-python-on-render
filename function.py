@@ -719,9 +719,9 @@ def F_twitterPreview(get_message, event):
     jdata1['body']['contents'][0]['url'] = profile_image_url
     jdata1['body']['contents'][1]['text'] = username
     jdata1['body']['contents'][2]['text'] = screen_name
-    jdata1['body']['contents'][5]['contents'][0]['text'] = tweet_text
-    jdata1['body']['contents'][5]['contents'][2]['contents'][1]['text'] = retweet_count
-    jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = favorite_count
+    jdata1['body']['contents'][4]['contents'][0]['text'] = tweet_text
+    jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = retweet_count
+    jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = favorite_count
     photos_urls = contents[contents.find(
         '"photos":[')+len('"photos":['):contents.find('],"index":')].split(',')
     msg = []
