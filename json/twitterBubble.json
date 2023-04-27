@@ -30,7 +30,7 @@
                 "layout": "horizontal",
                 "contents": [{
                         "type": "text",
-                        "text": "followers",
+                        "text": "",
                         "size": "xxs",
                         "color": "#aaaaaa"
                     },

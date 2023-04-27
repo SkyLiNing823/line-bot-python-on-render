@@ -719,7 +719,6 @@ def F_twitterPreview(get_message, event):
     jdata1['body']['contents'][0]['url'] = profile_image_url
     jdata1['body']['contents'][1]['text'] = username
     jdata1['body']['contents'][2]['text'] = screen_name
-    jdata1['body']['contents'][3]['contents'][1]['text'] = 'N/A'
     jdata1['body']['contents'][5]['contents'][0]['text'] = tweet_text
     jdata1['body']['contents'][5]['contents'][2]['contents'][1]['text'] = retweet_count
     jdata1['body']['contents'][5]['contents'][3]['contents'][1]['text'] = favorite_count
@@ -734,7 +733,7 @@ def F_twitterPreview(get_message, event):
             tmp = copy.deepcopy(jdata2)
             img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
             print(img_url)
-            tmp['hero']['url'] = img_url
+            tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
             ctn.append(tmp)
         img_save(img_url, event)
         if len(ctn) > 1:
