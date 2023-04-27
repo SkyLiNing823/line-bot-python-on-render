@@ -697,7 +697,7 @@ def F_twitterPreview(get_message, event):
     screen_name = contents[contents.find(
         '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
     profile_image_url = contents[contents.find(
-        '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('","textHtml":')]
+        '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
     tweet_text_HTML = contents[contents.find(
         '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
     bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
