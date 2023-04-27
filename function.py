@@ -696,8 +696,12 @@ def F_twitterPreview(get_message, event):
         '"name":"')+len('"name":"'):contents.find('","handler":"')]
     screen_name = contents[contents.find(
         '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
-    profile_image_url = contents[contents.find(
-        '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
+    if '.jpg' in contents:
+        profile_image_url = contents[contents.find(
+            '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
+    else:
+        profile_image_url = contents[contents.find(
+            '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.png')+4]
     if 'textHtml' in contents:
         tweet_text_HTML = contents[contents.find(
             '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
@@ -734,7 +738,10 @@ def F_twitterPreview(get_message, event):
             jdata2 = json.load(jfile)
         for i in range(len(photos_urls)):
             tmp = copy.deepcopy(jdata2)
-            img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
+            if 'jpg' in photos_urls[i]:
+                img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
+            else:
+                img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.png'
             print(img_url)
             tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
             ctn.append(tmp)
