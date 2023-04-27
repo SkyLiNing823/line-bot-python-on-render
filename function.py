@@ -29,7 +29,6 @@ import pyscord_storage
 import websocket
 import base64
 import audioread
-# from revChatGPT.ChatGPT import Chatbot
 
 from flask import Flask, abort, request
 
@@ -337,22 +336,22 @@ def F_TTS(get_message, event):
                 break
         data = results['output']['data'][1].split(',')[1]
         decoded_data = base64.b64decode(data)
-        with open('tmp.mp3', 'wb') as f:
+        with open('tmp.wav', 'wb') as f:
             f.write(decoded_data)
 
     elif get_message.split()[1].lower() in list(gtts.lang.tts_langs().keys()) and len(get_message.split()) > 2:
         LAN = get_message.split()[1].lower()
         tts = gtts.gTTS(text=get_message[8:], lang=LAN)
-        tts.save("tmp.mp3")
+        tts.save("tmp.wav")
     else:
         LAN = 'zh-tw'
         tts = gtts.gTTS(text=get_message[5:], lang=LAN)
-        tts.save("tmp.mp3")
-    with audioread.audio_open('tmp.mp3') as f:
+        tts.save("tmp.wav")
+    with audioread.audio_open('tmp.wav') as f:
         duration = int(f.duration) * 1000
-    data = pyscord_storage.upload('tmp.mp3', 'tmp.mp3')['data']
+    data = pyscord_storage.upload('tmp.wav', 'tmp.wav')['data']
     URL = data['url']
-    print(data['url'])
+    # print(data['url'])
     audio_reply(URL, duration, event)
 
 
@@ -855,41 +854,41 @@ def F_bahamutePreview(get_message, event):
     gp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[0].text
     bp = bsObj.findAll('a', {'class': 'tippy-gpbp-list'})[1].text
     rawCtn = bsObj.findAll('div', {'class': 'c-article__content'})[0]
-    ctn = rawCtn.findAll('div')
+    # ctn = rawCtn.findAll('div')
     article += '\n'+title+'\n\n'+'-'*len(title)+'\n\n'
     article += f'樓主: {username} {uid}\n\n推(GP): {gp}\n噓(BP): {bp}' + \
         '\n\n'+'-'*len(title)+'\n\n'
-    last_url = []
-    last_ctn = ''
-    for row in ctn:
-        if row.text != last_ctn:
-            article += row.text
-        last_ctn = row.text
-        try:
-            block = rawCtn.findAll('a', {'target': '_blank'})
-            for url in block:
-                if url not in last_url:
-                    article += '\n'+url['href']+'\n'
-                last_url.append(url)
-        except:
-            pass
-        try:
-            block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
-            for url in block:
-                if url not in last_url:
-                    article += '\n'+url['href']+'\n'
-                last_url.append(url)
-        except:
-            pass
-        try:
-            url = row.find('iframe', {'class': 'lazyload'})['data-src']
-            if url not in last_url:
-                article += '\n'+url+'\n'
-            last_url.append(url)
-        except:
-            pass
-    if len(article) > 5000:
-        article = article[:5000]
+    # last_url = []
+    # last_ctn = ''
+    # for row in ctn:
+    #     if row.text != last_ctn:
+    #         article += row.text
+    #     last_ctn = row.text
+    #     try:
+    #         block = rawCtn.findAll('a', {'target': '_blank'})
+    #         for url in block:
+    #             if url not in last_url:
+    #                 article += '\n'+url['href']+'\n'
+    #             last_url.append(url)
+    #     except:
+    #         pass
+    #     try:
+    #         block = rawCtn.findAll('a', {'class': 'photoswipe-image'})
+    #         for url in block:
+    #             if url not in last_url:
+    #                 article += '\n'+url['href']+'\n'
+    #             last_url.append(url)
+    #     except:
+    #         pass
+    #     try:
+    #         url = row.find('iframe', {'class': 'lazyload'})['data-src']
+    #         if url not in last_url:
+    #             article += '\n'+url+'\n'
+    #         last_url.append(url)
+    #     except:
+    #         pass
+    # if len(article) > 5000:
+    #     article = article[:5000]
     text_reply(article, event)
 
 
@@ -914,9 +913,11 @@ def F_bahamuteHomePreview(get_message, event):
     info = ctn[-1].text.split('\n')
     gp = info[1]
     collect = info[2]
-    article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
-    article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
-        '-'*len(title)+'\n\n'
+    article += '\n'+f'{title}\n\n'+'------\n\n' + \
+        f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n'
+    # article += '\n'+f'{title}\n\n'+'-'*len(title)+'\n\n'
+    # article += f'{date}\n{username}\nGP: {gp}\n收藏: {collect}\n\n' + \
+    #     '-'*len(title)+'\n\n'
     last_url = []
     last_ctn = ''
     for row in ctn[:-1]:

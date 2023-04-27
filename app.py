@@ -212,8 +212,8 @@ def handle_message(event):
     elif 'pixiv.net' in get_message:
         F_pixivPreview(get_message, event)
 
-    # elif 'forum.gamer.com.tw' in get_message:
-    #     F_bahamutePreview(get_message, event)
+    elif 'forum.gamer.com.tw' in get_message:
+        F_bahamutePreview(get_message, event)
 
     elif 'home.gamer.com.tw' in get_message:
         F_bahamuteHomePreview(get_message, event)
