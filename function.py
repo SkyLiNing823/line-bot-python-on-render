@@ -772,7 +772,7 @@ def F_twitterPreview(get_message, event):
         jdata1['body']['contents'][0]['url'] = 'https://cdn.discordapp.com/attachments/856516846144192543/1102493248120963153/R-18_icon.svg.png'
         jdata1['body']['contents'][1]['text'] = '@'+get_message.split('/')[-3]
         jdata1['body']['contents'][2][
-            'text'] = 'This is a R-18 tweet, so some information will not be displayed.\n (Only the first image will be showed)'
+            'text'] = '(Only the first image will be showed)'
         jdata1['body']['contents'][4]['contents'][0]['text'] = content
         jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = 'N/A'
         jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = 'N/A'
