@@ -756,7 +756,6 @@ def F_twitterPreview(get_message, event):
             elif len(ctn) == 1:
                 msg.append(ImageSendMessage(
                     original_content_url=img_url, preview_image_url=img_url))
-        line_reply(msg, event)
     else:
         p = {'url': get_message}
         r = requests.post(
@@ -781,7 +780,7 @@ def F_twitterPreview(get_message, event):
         msg.append(FlexSendMessage('tweet', jdata1))
         msg.append(ImageSendMessage(
             original_content_url=img_url, preview_image_url=img_url))
-        line_reply(msg, event)
+    line_reply(msg, event)
     #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
     # auth = tweepy.OAuthHandler(
