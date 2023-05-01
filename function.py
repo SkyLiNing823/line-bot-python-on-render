@@ -756,30 +756,64 @@ def F_twitterPreview(get_message, event):
             elif len(ctn) == 1:
                 msg.append(ImageSendMessage(
                     original_content_url=img_url, preview_image_url=img_url))
+        else:
+            p = {'url': get_message}
+            r = requests.post(
+                'https://www.expertsphp.com/instagram-reels-downloader.php', data=p)
+            html = r.content
+            bsObj = BeautifulSoup(html, 'html.parser')
+            if 'mp4' in r.text:
+                videos = bsObj.findAll(
+                    'a', {'class': 'btn-sm'})
+                for video in videos:
+                    if 'mp4' in video['href']:
+                        video_url = video['href']
+                    else:
+                        img_url = video['href']
+                msg.append(VideoSendMessage(
+                    original_content_url=video_url, preview_image_url=img_url))
+            else:
+                imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
+                for img in imgs:
+                    img_url = img['src']
+                msg.append(ImageSendMessage(
+                    original_content_url=img_url, preview_image_url=img_url))
     else:
         p = {'url': get_message}
         r = requests.post(
             'https://www.expertsphp.com/instagram-reels-downloader.php', data=p)
         html = r.content
         bsObj = BeautifulSoup(html, 'html.parser')
-        imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
-        for img in imgs:
-            content = img['title']
-            img_url = img['src']
         with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
             jdata1 = json.load(jfile)
         ctn = []
-        jdata1['body']['contents'][0]['url'] = 'https://cdn.discordapp.com/attachments/856516846144192543/1102493248120963153/R-18_icon.svg.png'
-        jdata1['body']['contents'][1]['text'] = '@'+get_message.split('/')[-3]
-        jdata1['body']['contents'][2][
-            'text'] = '(Only the first image will be showed)'
-        jdata1['body']['contents'][4]['contents'][0]['text'] = content
-        jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = 'N/A'
-        jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = 'N/A'
         msg = []
-        msg.append(FlexSendMessage('tweet', jdata1))
-        msg.append(ImageSendMessage(
-            original_content_url=img_url, preview_image_url=img_url))
+        if 'mp4' in r.text:
+            videos = bsObj.findAll(
+                'a', {'class': 'btn-sm'})
+            for video in videos:
+                if 'mp4' in video['href']:
+                    video_url = video['href']
+                else:
+                    img_url = video['href']
+            msg.append(VideoSendMessage(
+                original_content_url=video_url, preview_image_url=img_url))
+        else:
+            imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
+            for img in imgs:
+                content = img['title']
+                img_url = img['src']
+            jdata1['body']['contents'][0]['url'] = 'https://cdn.discordapp.com/attachments/856516846144192543/1102493248120963153/R-18_icon.svg.png'
+            jdata1['body']['contents'][1]['text'] = '@' + \
+                get_message.split('/')[-3]
+            jdata1['body']['contents'][2][
+                'text'] = '(Only the first image will be showed)'
+            jdata1['body']['contents'][4]['contents'][0]['text'] = content
+            jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = 'N/A'
+            jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = 'N/A'
+            msg.append(FlexSendMessage('tweet', jdata1))
+            msg.append(ImageSendMessage(
+                original_content_url=img_url, preview_image_url=img_url))
     line_reply(msg, event)
     #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
