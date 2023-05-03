@@ -689,79 +689,112 @@ def F_pttPreview(get_message, event):
 
 
 def F_twitterPreview(get_message, event):
-    url = 'https://tweetpik.com/api/v2/tweets?url='+get_message
-    request = requests.get(url)
-    contents = request.text
-    if "avatarUrl" in contents:
-        username = contents[contents.find(
-            '"name":"')+len('"name":"'):contents.find('","handler":"')]
-        screen_name = contents[contents.find(
-            '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
-        if '.jpg' in contents:
-            profile_image_url = contents[contents.find(
-                '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
-        else:
-            profile_image_url = contents[contents.find(
-                '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.png')+4]
-        if 'textHtml' in contents:
-            tweet_text_HTML = contents[contents.find(
-                '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
-            bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
-            tweet_text = ''
-            for i in bsObj:
-                tweet_text += i.text
-            tweet_text = tweet_text.replace('\\n', '\n')
-        else:
-            tweet_text = ' '
-        retweet_count = str(contents[contents.find(
-            '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
-        if retweet_count == 'null':
-            retweet_count = '0'
-        favorite_count = str(contents[contents.find(
-            ',"likes":')+len(',"likes":'):contents.find(',"retweets":')])
-        if favorite_count == 'null':
-            favorite_count = '0'
-        with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
-            jdata1 = json.load(jfile)
-        ctn = []
-        jdata1['body']['contents'][0]['url'] = profile_image_url
-        jdata1['body']['contents'][1]['text'] = username
-        jdata1['body']['contents'][2]['text'] = screen_name
-        jdata1['body']['contents'][4]['contents'][0]['text'] = tweet_text
-        jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = retweet_count
-        jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = favorite_count
-        photos_urls = contents[contents.find(
-            '"photos":[')+len('"photos":['):contents.find('],"index":')].split(',')
-        msg = []
-        msg.append(FlexSendMessage('tweet', jdata1))
-        if photos_urls[0] != '':
-            with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
-                jdata2 = json.load(jfile)
-            for i in range(len(photos_urls)):
-                tmp = copy.deepcopy(jdata2)
-                if 'jpg' in photos_urls[i]:
-                    img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.jpg'
+    stack = []
+    msg = []
+    ctn = []
+    with open('twitterStack.txt', 'a') as f:
+        f.write(get_message+'\n')
+    with open('twitterStack.txt', 'r') as f:
+        for line in f.readlines():
+            stack.append(line)
+    for link in stack:
+        url = 'https://tweetpik.com/api/v2/tweets?url='+link
+        request = requests.get(url)
+        contents = request.text
+        if "avatarUrl" in contents:
+            username = contents[contents.find(
+                '"name":"')+len('"name":"'):contents.find('","handler":"')]
+            screen_name = contents[contents.find(
+                '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
+            if '.jpg' in contents:
+                profile_image_url = contents[contents.find(
+                    '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.jpg')+4]
+            else:
+                profile_image_url = contents[contents.find(
+                    '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.png')+4]
+            if 'textHtml' in contents:
+                tweet_text_HTML = contents[contents.find(
+                    '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
+                bsObj = BeautifulSoup(tweet_text_HTML, 'html.parser')
+                tweet_text = ''
+                for i in bsObj:
+                    tweet_text += i.text
+                tweet_text = tweet_text.replace('\\n', '\n')
+            else:
+                tweet_text = ' '
+            retweet_count = str(contents[contents.find(
+                '"retweets":')+len('"retweets":'):contents.find(',"replies"')])
+            if retweet_count == 'null':
+                retweet_count = '0'
+            favorite_count = str(contents[contents.find(
+                ',"likes":')+len(',"likes":'):contents.find(',"retweets":')])
+            if favorite_count == 'null':
+                favorite_count = '0'
+            with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
+                jdata1 = json.load(jfile)
+            jdata1['body']['contents'][0]['url'] = profile_image_url
+            jdata1['body']['contents'][1]['text'] = username
+            jdata1['body']['contents'][2]['text'] = screen_name
+            jdata1['body']['contents'][4]['contents'][0]['text'] = tweet_text
+            jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = retweet_count
+            jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = favorite_count
+            photos_urls = contents[contents.find(
+                '"photos":[')+len('"photos":['):contents.find('],"index":')].split(',')
+            msg.append(FlexSendMessage('tweet', jdata1))
+            if photos_urls[0] != '':
+                with open('json/imgBubble.json', 'r', encoding='utf8') as jfile:
+                    jdata2 = json.load(jfile)
+                for i in range(len(photos_urls)):
+                    tmp = copy.deepcopy(jdata2)
+                    if 'jpg' in photos_urls[i]:
+                        img_url = photos_urls[i][1:photos_urls[i].find(
+                            '?')]+'.jpg'
+                    else:
+                        img_url = photos_urls[i][1:photos_urls[i].find(
+                            '?')]+'.png'
+                    print(img_url)
+                    tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
+                    ctn.append(tmp)
+                img_save(img_url, event)
+                if len(ctn) > 1:
+                    with open('json/carousel.json', 'r', encoding='utf8') as jfile:
+                        jdata = json.load(jfile)
+                    jdata['contents'] = ctn
+                    reply = jdata
+                    msg.append(FlexSendMessage('tweet', reply))
+                elif len(ctn) == 1:
+                    msg.append(ImageSendMessage(
+                        original_content_url=img_url, preview_image_url=img_url))
+            else:
+                p = {'url': get_message}
+                r = requests.post(
+                    'https://www.expertsphp.com/instagram-reels-downloader.php', data=p)
+                html = r.content
+                bsObj = BeautifulSoup(html, 'html.parser')
+                if 'mp4' in r.text:
+                    videos = bsObj.findAll(
+                        'a', {'class': 'btn-sm'})
+                    for video in videos:
+                        if 'mp4' in video['href']:
+                            video_url = video['href']
+                        else:
+                            img_url = video['href']
+                    msg.append(VideoSendMessage(
+                        original_content_url=video_url, preview_image_url=img_url))
                 else:
-                    img_url = photos_urls[i][1:photos_urls[i].find('?')]+'.png'
-                print(img_url)
-                tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
-                ctn.append(tmp)
-            img_save(img_url, event)
-            if len(ctn) > 1:
-                with open('json/carousel.json', 'r', encoding='utf8') as jfile:
-                    jdata = json.load(jfile)
-                jdata['contents'] = ctn
-                reply = jdata
-                msg.append(FlexSendMessage('tweet', reply))
-            elif len(ctn) == 1:
-                msg.append(ImageSendMessage(
-                    original_content_url=img_url, preview_image_url=img_url))
+                    imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
+                    for img in imgs:
+                        img_url = img['src']
+                    msg.append(ImageSendMessage(
+                        original_content_url=img_url, preview_image_url=img_url))
         else:
             p = {'url': get_message}
             r = requests.post(
                 'https://www.expertsphp.com/instagram-reels-downloader.php', data=p)
             html = r.content
             bsObj = BeautifulSoup(html, 'html.parser')
+            with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
+                jdata1 = json.load(jfile)
             if 'mp4' in r.text:
                 videos = bsObj.findAll(
                     'a', {'class': 'btn-sm'})
@@ -775,45 +808,21 @@ def F_twitterPreview(get_message, event):
             else:
                 imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
                 for img in imgs:
+                    content = img['title']
                     img_url = img['src']
+                jdata1['body']['contents'][0]['url'] = 'https://cdn.discordapp.com/attachments/856516846144192543/1102493248120963153/R-18_icon.svg.png'
+                jdata1['body']['contents'][1]['text'] = '@' + \
+                    get_message.split('/')[-3]
+                jdata1['body']['contents'][2][
+                    'text'] = '(Only the first image will be showed)'
+                jdata1['body']['contents'][4]['contents'][0]['text'] = content
+                jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = 'N/A'
+                jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = 'N/A'
+                msg.append(FlexSendMessage('tweet', jdata1))
                 msg.append(ImageSendMessage(
                     original_content_url=img_url, preview_image_url=img_url))
-    else:
-        p = {'url': get_message}
-        r = requests.post(
-            'https://www.expertsphp.com/instagram-reels-downloader.php', data=p)
-        html = r.content
-        bsObj = BeautifulSoup(html, 'html.parser')
-        with open('json/twitterBubble.json', 'r', encoding='utf8') as jfile:
-            jdata1 = json.load(jfile)
-        ctn = []
-        msg = []
-        if 'mp4' in r.text:
-            videos = bsObj.findAll(
-                'a', {'class': 'btn-sm'})
-            for video in videos:
-                if 'mp4' in video['href']:
-                    video_url = video['href']
-                else:
-                    img_url = video['href']
-            msg.append(VideoSendMessage(
-                original_content_url=video_url, preview_image_url=img_url))
-        else:
-            imgs = bsObj.findAll('img', {'alt': 'Thumbnail'})
-            for img in imgs:
-                content = img['title']
-                img_url = img['src']
-            jdata1['body']['contents'][0]['url'] = 'https://cdn.discordapp.com/attachments/856516846144192543/1102493248120963153/R-18_icon.svg.png'
-            jdata1['body']['contents'][1]['text'] = '@' + \
-                get_message.split('/')[-3]
-            jdata1['body']['contents'][2][
-                'text'] = '(Only the first image will be showed)'
-            jdata1['body']['contents'][4]['contents'][0]['text'] = content
-            jdata1['body']['contents'][4]['contents'][2]['contents'][1]['text'] = 'N/A'
-            jdata1['body']['contents'][4]['contents'][3]['contents'][1]['text'] = 'N/A'
-            msg.append(FlexSendMessage('tweet', jdata1))
-            msg.append(ImageSendMessage(
-                original_content_url=img_url, preview_image_url=img_url))
+    with open('twitterStack.txt', 'w') as f:
+        f.write('')
     line_reply(msg, event)
     #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
