@@ -821,9 +821,9 @@ def F_twitterPreview(get_message, event):
                 msg.append(FlexSendMessage('tweet', jdata1))
                 msg.append(ImageSendMessage(
                     original_content_url=img_url, preview_image_url=img_url))
+    line_reply(msg, event)
     with open('twitterStack.txt', 'w') as f:
         f.write('')
-    line_reply(msg, event)
     #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
     # auth = tweepy.OAuthHandler(
