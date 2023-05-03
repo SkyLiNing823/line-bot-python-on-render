@@ -14,7 +14,7 @@ import googletrans
 from googlesearch import search
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import tweepy
+# import tweepy
 import pyimgur
 import matplotlib.pyplot as plt
 import speech_recognition as sr
