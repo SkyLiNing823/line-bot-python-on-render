@@ -703,7 +703,7 @@ def F_twitterPreview(get_message, event):
         contents = request.text
         if "avatarUrl" in contents:
             username = contents[contents.find(
-                '"nameHtml":"<div class=\"css-1dbjc4n r-1awozwy r-18u37iz r-1wbh5a2 r-dnmrzs\"><div dir=\"ltr\" class=\"css-901oao r-1awozwy r-18jsvk2 r-6koalj r-37j5jr r-a023e6 r-b88u0q r-rjixqe r-bcqeeo r-1udh08x r-3s2u2q r-qvutc0\"><span class=\"css-901oao css-16my406 css-1hf3ou5 r-poiln3 r-bcqeeo r-qvutc0\"><span class=\"css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0\">')+len('"nameHtml":"<div class=\"css-1dbjc4n r-1awozwy r-18u37iz r-1wbh5a2 r-dnmrzs\"><div dir=\"ltr\" class=\"css-901oao r-1awozwy r-18jsvk2 r-6koalj r-37j5jr r-a023e6 r-b88u0q r-rjixqe r-bcqeeo r-1udh08x r-3s2u2q r-qvutc0\"><span class=\"css-901oao css-16my406 css-1hf3ou5 r-poiln3 r-bcqeeo r-qvutc0\"><span class=\"css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0\">'):contents.find('</span>')]
+                '<span class=\"css-901oao css-16my406 css-1hf3ou5 r-poiln3 r-bcqeeo r-qvutc0\"><span class=\"css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0\">')+len('<span class=\"css-901oao css-16my406 css-1hf3ou5 r-poiln3 r-bcqeeo r-qvutc0\"><span class=\"css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0\">'):contents.find('</span>')]
             screen_name = contents[contents.find(
                 '"handler":"')+len('"handler":"'):contents.find('","avatarUrl":"')]
             if '.jpg' in contents:
