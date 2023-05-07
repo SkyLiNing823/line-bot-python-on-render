@@ -752,10 +752,12 @@ def F_twitterPreview(get_message, event):
                     else:
                         img_url = photos_urls[i][1:photos_urls[i].find(
                             '?')]+'.png'
-                    print(img_url)
-                    tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
-                    ctn.append(tmp)
-                img_save(img_url, event)
+                    if 'https' in img_url:
+                        print(img_url)
+                        tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
+                        ctn.append(tmp)
+                        url = img_url
+                img_save(url, event)
                 if len(ctn) > 1:
                     with open('json/carousel.json', 'r', encoding='utf8') as jfile:
                         jdata = json.load(jfile)
