@@ -779,7 +779,7 @@ def F_twitterPreview(get_message, event):
                     s = 0
                     for video in videos:
                         if 'mp4' in video['href'] and s == 0:
-                            video_url = videos['href']
+                            video_url = video['href']
                             s = 1
                         else:
                             img_url = video['href']
