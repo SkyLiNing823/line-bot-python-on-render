@@ -752,8 +752,8 @@ def F_twitterPreview(get_message, event):
                     else:
                         img_url = photos_urls[i][1:photos_urls[i].find(
                             '?')]+'.png'
+                    print(img_url)
                     if 'https' in img_url:
-                        print(img_url)
                         tmp['hero']['url'] = tmp['hero']['action']['uri'] = img_url
                         ctn.append(tmp)
                         url = img_url
