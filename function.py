@@ -776,11 +776,14 @@ def F_twitterPreview(get_message, event):
                 if 'mp4' in r.text:
                     videos = bsObj.findAll(
                         'a', {'class': 'btn-sm'})
-                    s = 0
+                    max_resolution = 0
                     for video in videos:
-                        if 'mp4' in video['href'] and s == 0:
-                            video_url = video['href']
-                            s = 1
+                        if 'mp4' in video['href']:
+                            resolution = eval(video['href'].split(
+                                '/')[-2].replace('x', '*'))
+                            if resolution > max_resolution:
+                                video_url = video['href']
+                                max_resolution = resolution
                         else:
                             img_url = video['href']
                     msg.append(VideoSendMessage(
