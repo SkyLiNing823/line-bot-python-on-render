@@ -712,6 +712,8 @@ def F_twitterPreview(get_message, event):
             else:
                 profile_image_url = contents[contents.find(
                     '","avatarUrl":"')+len('","avatarUrl":"'):contents.find('.png')+4]
+            if 'https' not in profile_image_url:
+                profile_image_url = 'https://upload.wikimedia.org/wikipedia/commons/5/50/Black_colour.jpg'
             if 'textHtml' in contents:
                 tweet_text_HTML = contents[contents.find(
                     '"textHtml":"')+len('"textHtml":"'):contents.find('","verified"')]
