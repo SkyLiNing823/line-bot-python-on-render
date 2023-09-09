@@ -603,11 +603,12 @@ def F_nh(split, get_message, event):
 def F_ytPreview(l_get_message, jdata, event):
     YOUTUBE_API_KEY = jdata['YOUTUBE_API_KEY']
     if l_get_message[:17] == 'https://youtu.be/':
-        id = l_get_message[17:].rstrip()
+        id = l_get_message[17:l_get_message.index('?')].rstrip()
     elif l_get_message[:24] == 'https://www.youtube.com/':
-        id = l_get_message[32:].rstrip()
+        id = l_get_message[32:l_get_message.index('?')].rstrip()
     elif l_get_message[:22] == "https://m.youtube.com/":
-        id = l_get_message[30:].rstrip()
+        id = l_get_message[30:l_get_message.index('?')].rstrip()
+    print(id)
     URL = 'https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=' + \
         id+'&key='+YOUTUBE_API_KEY
     request = requests.get(URL)
