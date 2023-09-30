@@ -206,7 +206,7 @@ def handle_message(event):
     elif 'ptt' in get_message and '不印出' not in get_message:
         F_pttPreview(get_message, event)
 
-    elif 'twitter.com' or 'x.com' in get_message:
+    elif 'twitter.com' in get_message or 'x.com' in get_message:
         F_twitterPreview(get_message, event)
 
     elif 'pixiv.net' in get_message:
