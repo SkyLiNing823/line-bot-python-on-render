@@ -34,3 +34,4 @@ saucenao-api==2.4.0
 pyscord-storage==1.0.0
 websocket-client==1.5.1
 audioread==3.0.0
+google-generativeai
