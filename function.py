@@ -557,46 +557,52 @@ def F_tmr(send_headers, split, event):
         text_reply(URL[index-1], event)
 
 
-def F_nh(split, get_message, event):
-    content = ''
+def F_nh(split, event):
+    # content = ''
     URL = 'https://nhentai.net'
-    serach_URL = 'https://nhentai.net/search/?q='
-    if get_message.lower() == '!nh':
-        q = 'a'
-        serach_URL += q
-        request = requests.get(serach_URL)
-        html = request.content
-        bsObj = BeautifulSoup(html, 'html.parser')
-        shouter = bsObj.findAll('a', {'class': 'cover'})
-        for i in shouter:
-            num = i['href'][3:-1]
-            break
-        num = random.randint(1, int(num)+1)
-        content = URL + '/g/' + str(num) + '/'
-    elif split[-1].isdigit() and len(split) == 2:
-        num = int(get_message[4:])
-        content = URL + '/g/' + str(num) + '/'
-    else:
-        if split[-1].isdigit():
-            q = get_message[4:-1*(len(split[-1])+1)]
-            n = int(split[-1])
-        else:
-            q = get_message[4:]
-            n = 5
-        serach_URL += q
-        request = requests.get(serach_URL)
-        html = request.content
-        bsObj = BeautifulSoup(html, 'html.parser')
-        shouter = bsObj.findAll('a', {'class': 'cover'})
-        t = 0
-        for i in shouter:
-            t += 1
-            if t == n+1:
-                break
-            else:
-                content += URL+i['href']
-                if t != n:
-                    content += '\n'
+    # serach_URL = 'https://nhentai.net/search/?q='
+    # if get_message.lower() == '!nh':
+    #     q = 'a'
+    #     serach_URL += q
+    #     request = requests.get(serach_URL)
+    #     html = request.content
+    #     bsObj = BeautifulSoup(html, 'html.parser')
+    #     shouter = bsObj.findAll('a', {'class': 'cover'})
+    #     for i in shouter:
+    #         num = i['href'][3:-1]
+    #         break
+    #     num = random.randint(1, int(num)+1)
+    #     content = URL + '/g/' + str(num) + '/'
+    # elif split[-1].isdigit() and len(split) == 2:
+    #     num = int(get_message[4:])
+    #     content = URL + '/g/' + str(num) + '/'
+    # else:
+    #     if split[-1].isdigit():
+    #         q = get_message[4:-1*(len(split[-1])+1)]
+    #         n = int(split[-1])
+    #     else:
+    #         q = get_message[4:]
+    #         n = 5
+    #     serach_URL += q
+    #     request = requests.get(serach_URL)
+    #     html = request.content
+    #     bsObj = BeautifulSoup(html, 'html.parser')
+    #     shouter = bsObj.findAll('a', {'class': 'cover'})
+    #     t = 0
+    #     for i in shouter:
+    #         t += 1
+    #         if t == n+1:
+    #             break
+    #         else:
+    #             content += URL+i['href']
+    #             if t != n:
+    #                 content += '\n'
+    content = URL + '/g/' + str(split[-1]) + '/'
+    text_reply(content, event)
+
+
+def F_wn(split, event):
+    content = f'https://www.wnacg.com/photos-index-aid-{str(split[-1])}.html'
     text_reply(content, event)
 
 
@@ -637,12 +643,12 @@ def F_ytPreview(l_get_message, jdata, event):
         sub = data['items'][0]['statistics']['subscriberCount']
     except:
         sub = 'N/A'
-    text = title+'\n' +\
+    text = title+'\n' + \
         '-'+'\n' +\
         '<頻道資訊>\n' +\
         channel+'\n' +\
-        '訂閱數: '+str(sub)+'\n'\
-        '-'+'\n' +\
+        '訂閱數: '+str(sub)+'\n'
+    '-'+'\n' +\
         '<影片資訊>\n' +\
         '觀看數: '+str(view)+'\n' +\
         '讚數: '+str(like)+'    倒讚數: '+str(dislike)+'\n' +\
@@ -680,10 +686,7 @@ def F_pttPreview(get_message, event):
         texts = pre_text.split('\n')
         contents = texts[2:]
         content = '\n'.join(contents)
-        text = title + '\n' +\
-            '作者: '+author + '\n' +\
-            '-'+'\n' +\
-            content
+        text = title + '\n' + '作者: '+author + '\n' + '-'+'\n' + content
     if len(text) > 5000:
         text = text[:5000]
     text_reply(text, event)

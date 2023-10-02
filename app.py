@@ -191,7 +191,10 @@ def handle_message(event):
     #     F_tmr(send_headers, split, event)
 
     elif get_message[:3].lower() == '!nh':
-        F_nh(split, get_message, event)
+        F_nh(split, event)
+
+    elif get_message[:3].lower() == '!wn':
+        F_wn(split, event)
 
     elif get_message == '!戴男':
         rand_voice = random.choice(jdata['dai_voice'])
