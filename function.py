@@ -29,6 +29,8 @@ import pyscord_storage
 import websocket
 import base64
 import audioread
+import pprint
+import google.generativeai as palm
 
 from flask import Flask, abort, request
 
@@ -1238,6 +1240,20 @@ def F_searchByIMG(id, x):
 def F_vote(event):
     reply = json.load(open('json/vote.json', 'r', encoding='utf-8'))
     flex_reply('vote', reply, event)
+
+def LLM(get_message, event):
+    palm.configure(api_key=os.getenv('PaLM_KEY', None))
+    models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+    model = models[0].name
+    completion = palm.generate_text(
+    model=model,
+    prompt=get_message[4:],
+    temperature=0,
+    # The maximum length of the response
+    max_output_tokens=800,
+    )
+    text_reply(completion.result,event)
+               
 
 # def F_bot():
     # line_bot_api.reply_message(  # 回復傳入的訊息文字

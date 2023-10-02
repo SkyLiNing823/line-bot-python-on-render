@@ -137,6 +137,8 @@ def handle_message(event):
 
     # if split[0].lower() == '!gpt':
     #     F_chatGPT(get_message, event)
+    if get_message[:4].lower() == '@bot':
+        LLM(get_message, event)
 
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)
