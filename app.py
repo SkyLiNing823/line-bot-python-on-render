@@ -9,6 +9,7 @@ from googlesearch import search
 import os
 from function import*
 import sys
+import google.generativeai as palm
 
 
 from flask import Flask, abort, g, request
@@ -68,6 +69,7 @@ Message_counter = 0
 Message_container = ''
 previous_user_name = ''
 
+palm_response = palm.chat(messages="Hi", temperature=1)
 
 @app.route("/", methods=["GET", "POST"])
 def callback():
@@ -139,10 +141,7 @@ def handle_message(event):
         LLM(get_message, event)
     
     if get_message[:4].lower() == '!bot':
-        try:
-            response, reply = LLM(get_message, event, mode='chat', response=response)
-        except:
-            response, reply = LLM(get_message, event, mode='chat')
+        palm_response, reply = LLM(get_message, event, mode='chat', response=palm_response)
         text_reply(reply, event)
 
     if split[0].lower() == '!t':
