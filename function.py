@@ -1261,7 +1261,7 @@ def LLM(get_message, event):
     )
     if Lang.lang != 'en':
         print(Lang.lang)
-        if Lang.lang == 'zh-cn':
+        if Lang.lang == 'zh-CN':
             reply = translator.translate(completion.result, dest='zh-tw').text
         else:
             reply = translator.translate(
