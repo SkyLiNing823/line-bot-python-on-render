@@ -139,7 +139,11 @@ def handle_message(event):
         LLM(get_message, event)
     
     if get_message[:4].lower() == '!bot':
-        LLM(get_message, event, mode='chat')
+        try:
+            response, reply = LLM(get_message, event, mode='chat', response=response)
+        except:
+            response, reply = LLM(get_message, event, mode='chat')
+        text_reply(reply, event)
 
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)

@@ -1242,7 +1242,7 @@ def F_vote(event):
     flex_reply('vote', reply, event)
 
 
-def LLM(get_message, event, mode='text'):
+def LLM(get_message, event, mode='text', response=''):
     prompt = get_message[4:]
     translator = googletrans.Translator()
     Lang = translator.detect(prompt)
@@ -1277,7 +1277,8 @@ def LLM(get_message, event, mode='text'):
         reply += f'\n\n{words}'
     else:
         reply = words
-
+    if mode == 'chat':
+        return response, reply
     text_reply(reply, event)
 
 
