@@ -1241,6 +1241,7 @@ def F_vote(event):
     reply = json.load(open('json/vote.json', 'r', encoding='utf-8'))
     flex_reply('vote', reply, event)
 
+
 def LLM(get_message, event):
     prompt = get_message[4:]
     translator = googletrans.Translator()
@@ -1248,21 +1249,28 @@ def LLM(get_message, event):
     if Lang.lang != 'en':
         prompt = translator.translate(prompt, dest='en').text
     palm.configure(api_key=os.getenv('PaLM_KEY', None))
-    models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+    models = [m for m in palm.list_models(
+    ) if 'generateText' in m.supported_generation_methods]
     model = models[0].name
     completion = palm.generate_text(
-    model=model,
-    prompt=prompt,
-    temperature=0,
-    # The maximum length of the response
-    max_output_tokens=800,
+        model=model,
+        prompt=prompt,
+        temperature=0,
+        # The maximum length of the response
+        max_output_tokens=800,
     )
     if Lang.lang != 'en':
-        reply = translator.translate(completion.result, dest=Lang.lang).text
+        if Lang.lang == 'zh-cn':
+            reply = translator.translate(completion.result, dest='zh-tw').text
+        else:
+            reply = translator.translate(
+                completion.result, dest=Lang.lang).text
+        reply += f'\n\n{completion.result}'
     else:
         reply = completion.result
-    text_reply(reply,event)
-               
+
+    text_reply(reply, event)
+
 
 # def F_bot():
     # line_bot_api.reply_message(  # 回復傳入的訊息文字
