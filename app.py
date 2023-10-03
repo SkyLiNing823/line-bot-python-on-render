@@ -68,7 +68,7 @@ handler = WebhookHandler(channel_secret)
 Message_counter = 0
 Message_container = ''
 previous_user_name = ''
-
+palm.configure(api_key=os.getenv('PaLM_KEY', None))
 palm_response = palm.chat(messages="Hi", temperature=1)
 
 @app.route("/", methods=["GET", "POST"])
@@ -119,6 +119,7 @@ def handle_message(event):
     global Message_container
     global previous_user_name
     global palm_response
+
     if Message_container == get_message:
         Message_counter += 1
     else:
