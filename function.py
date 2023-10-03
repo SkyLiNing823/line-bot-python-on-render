@@ -1262,8 +1262,11 @@ def LLM(get_message, event, mode='text'):
         )
         words = completion.result
     elif mode == 'chat':
-        response = palm.chat(messages=prompt, temperature=1)
-        print(response.messages)
+        try:
+            print(response.messages)
+            response = response.reply(messages=prompt, temperature=1)
+        except:
+            response = palm.chat(messages=prompt, temperature=1)
         words = response.last
     if Lang.lang != 'en':
         if Lang.lang == 'zh-CN':
