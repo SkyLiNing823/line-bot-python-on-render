@@ -1263,7 +1263,7 @@ def LLM(get_message, event, mode='text', response=''):
         words = completion.result
     elif mode == 'chat':
         if prompt == 'r':
-            palm.chat(messages="Hi")
+            response = palm.chat(messages="Hi")
         else:
             response = response.reply(prompt)
         words = response.last
