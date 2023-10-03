@@ -70,6 +70,7 @@ Message_container = ''
 previous_user_name = ''
 palm.configure(api_key=os.getenv('PaLM_KEY', None))
 palm_response = palm.chat(messages="Hi")
+palm_response = palm_response.reply("Hi")
 
 @app.route("/", methods=["GET", "POST"])
 def callback():
