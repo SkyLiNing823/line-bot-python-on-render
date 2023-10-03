@@ -1260,7 +1260,6 @@ def LLM(get_message, event):
         max_output_tokens=800,
     )
     if Lang.lang != 'en':
-        print(Lang.lang)
         if Lang.lang == 'zh-CN':
             reply = translator.translate(completion.result, dest='zh-tw').text
         else:
