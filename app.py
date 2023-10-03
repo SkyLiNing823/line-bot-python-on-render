@@ -118,6 +118,7 @@ def handle_message(event):
     global Message_counter
     global Message_container
     global previous_user_name
+    global palm_response
     if Message_container == get_message:
         Message_counter += 1
     else:
