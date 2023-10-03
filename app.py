@@ -135,10 +135,11 @@ def handle_message(event):
     with open('json/setting.json', 'r', encoding='utf8') as jfile:
         jdata = json.load(jfile)
 
-    # if split[0].lower() == '!gpt':
-    #     F_chatGPT(get_message, event)
     if get_message[:4].lower() == '@bot' or get_message[:4] == '神奇海螺':
         LLM(get_message, event)
+    
+    if get_message[:4].lower() == '!bot':
+        LLM(get_message, event, mode='chat')
 
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)

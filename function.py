@@ -1242,7 +1242,7 @@ def F_vote(event):
     flex_reply('vote', reply, event)
 
 
-def LLM(get_message, event):
+def LLM(get_message, event, mode='text'):
     prompt = get_message[4:]
     translator = googletrans.Translator()
     Lang = translator.detect(prompt)
@@ -1252,22 +1252,27 @@ def LLM(get_message, event):
     models = [m for m in palm.list_models(
     ) if 'generateText' in m.supported_generation_methods]
     model = models[0].name
-    completion = palm.generate_text(
-        model=model,
-        prompt=prompt,
-        temperature=1.0,
-        # The maximum length of the response
-        max_output_tokens=800,
-    )
+    if mode == 'text':
+        completion = palm.generate_text(
+            model=model,
+            prompt=prompt,
+            temperature=1.0,
+            # The maximum length of the response
+            max_output_tokens=800,
+        )
+        words = completion.result
+    elif mode == 'chat':
+        response = palm.chat(messages=prompt, temperature=1)
+        words = response.last
     if Lang.lang != 'en':
         if Lang.lang == 'zh-CN':
-            reply = translator.translate(completion.result, dest='zh-tw').text
+            reply = translator.translate(words, dest='zh-tw').text
         else:
             reply = translator.translate(
-                completion.result, dest=Lang.lang).text
-        reply += f'\n\n{completion.result}'
+                words, dest=Lang.lang).text
+        reply += f'\n\n{words}'
     else:
-        reply = completion.result
+        reply = words
 
     text_reply(reply, event)
 
