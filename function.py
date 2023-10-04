@@ -1266,12 +1266,12 @@ def LLM(get_message, event, mode='text'):
         if words == "None":
             words = 'yes'
     elif mode == 'chat':
+        sheet = sheet_reload("1jZs62-bWgOZDJXHZZBHw09xL2PmG9kP1eotrp6l7aRg")
         if prompt == 'r':
             memories = []
             sheet.clear()
             text_reply("已刪除所有記憶", event)
         else:
-            sheet = sheet_reload("1jZs62-bWgOZDJXHZZBHw09xL2PmG9kP1eotrp6l7aRg")
             data = sheet.get_all_values()
             memories = [data[i][0] for i in range(len(data))]
             memories.append(prompt)
