@@ -1283,7 +1283,7 @@ def LLM(get_message, event, mode='text'):
             response = response.reply(prompt)
             words = response.last
             if words == "None":
-                words = "I don't know."
+                words = "yes."
             memories.append(words)
             sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
     if Lang.lang != 'en':
