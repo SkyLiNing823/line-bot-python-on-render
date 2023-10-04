@@ -68,9 +68,6 @@ handler = WebhookHandler(channel_secret)
 Message_counter = 0
 Message_container = ''
 previous_user_name = ''
-palm.configure(api_key=os.getenv('PaLM_KEY', None))
-palm_response = palm.chat(messages="Hi")
-palm_response = palm_response.reply("Hi")
 
 @app.route("/", methods=["GET", "POST"])
 def callback():
@@ -144,8 +141,7 @@ def handle_message(event):
         LLM(get_message, event)
     
     if get_message[:4].lower() == '!bot':
-        palm_response, reply = LLM(get_message, event, mode='chat', response=palm_response)
-        text_reply(reply, event)
+        LLM(get_message, event, mode='chat')
 
     if split[0].lower() == '!t':
         F_translate(get_message, split, event)

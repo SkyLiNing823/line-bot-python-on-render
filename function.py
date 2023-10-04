@@ -1242,7 +1242,7 @@ def F_vote(event):
     flex_reply('vote', reply, event)
 
 
-def LLM(get_message, event, mode='text', response=''):
+def LLM(get_message, event, mode='text'):
     prompt = get_message[4:]
     translator = googletrans.Translator()
     Lang = translator.detect(prompt)
@@ -1263,12 +1263,31 @@ def LLM(get_message, event, mode='text', response=''):
         words = completion.result
         if words == "no":
             words = random.choice(['yes','no'])
+        if words == "None":
+            words = 'yes'
     elif mode == 'chat':
         if prompt == 'r':
-            response = palm.chat(messages="Hi")
+            memories = []
+            sheet.clear()
+            text_reply("已刪除所有記憶", event)
         else:
-            response = response.reply(prompt)
-        words = response.last
+            sheet = sheet_reload("1jZs62-bWgOZDJXHZZBHw09xL2PmG9kP1eotrp6l7aRg")
+            data = sheet.get_all_values()
+            memories = [data[i][0] for i in range(len(data))]
+            memories.append(prompt)
+            msgs = []
+            for i in range(len(memories)):
+                msgs.append({'author': f'{i%2}', 'content': memories[i]})
+            if len(memories) == 0:
+                response = palm.chat(messages=prompt)
+            else:
+                response = palm.chat(messages="Hi")
+                response.messages = msgs
+                response.reply(prompt)
+            words = response.last
+            memories.append(words)
+            sheet.update_cell(f'A{len(memories)-1}', prompt)
+            sheet.update_cell(f'A{len(memories)}', words)
     if Lang.lang != 'en':
         if Lang.lang == 'zh-CN':
             reply = translator.translate(words, dest='zh-tw').text
@@ -1278,8 +1297,6 @@ def LLM(get_message, event, mode='text', response=''):
         reply += f'\n\n{words}'
     else:
         reply = words
-    if mode == 'chat':
-        return response, reply
     text_reply(reply, event)
 
 
