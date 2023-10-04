@@ -1263,7 +1263,7 @@ def LLM(get_message, event, mode='text'):
         words = completion.result
         if words == "no":
             words = random.choice(['yes','no'])
-        if words == "None":
+        if words == None:
             words = 'yes'
     elif mode == 'chat':
         sheet = sheet_reload("1jZs62-bWgOZDJXHZZBHw09xL2PmG9kP1eotrp6l7aRg")
@@ -1282,7 +1282,7 @@ def LLM(get_message, event, mode='text'):
             response.messages = msgs
             response = response.reply(prompt)
             words = response.last
-            if words == "None":
+            if words == None:
                 words = "I don't know."
             memories.append(words)
             sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
