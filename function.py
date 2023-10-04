@@ -1278,12 +1278,9 @@ def LLM(get_message, event, mode='text'):
             msgs = []
             for i in range(len(memories)):
                 msgs.append({'author': f'{i%2}', 'content': memories[i]})
-            if len(memories) == 0:
-                response = palm.chat(messages=prompt)
-            else:
-                response = palm.chat(messages="Hi")
-                response.messages = msgs
-                response = response.reply(prompt)
+            response = palm.chat(messages="Hi")
+            response.messages = msgs
+            response = response.reply(prompt)
             words = response.last
             memories.append(words)
             sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
