@@ -1286,7 +1286,7 @@ def LLM(get_message, event, mode='text'):
                 response.reply(prompt)
             words = response.last
             memories.append(words)
-            sheet.update(f'A{len(memories)-1}:A{len(memories)}', [prompt, words])
+            sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
     if Lang.lang != 'en':
         if Lang.lang == 'zh-CN':
             reply = translator.translate(words, dest='zh-tw').text
