@@ -1283,7 +1283,7 @@ def LLM(get_message, event, mode='text'):
             else:
                 response = palm.chat(messages="Hi")
                 response.messages = msgs
-                response.reply(prompt)
+                response = response.reply(prompt)
             words = response.last
             memories.append(words)
             sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
