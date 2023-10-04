@@ -1261,6 +1261,8 @@ def LLM(get_message, event, mode='text', response=''):
             max_output_tokens=800,
         )
         words = completion.result
+        if words.lower() == "no":
+            words = random.choice['yes','no']
     elif mode == 'chat':
         if prompt == 'r':
             response = palm.chat(messages="Hi")
