@@ -1262,7 +1262,7 @@ def LLM(get_message, event, mode='text'):
         )
         words = completion.result
         if words == "no":
-            words = random.choice(['yes','no'])
+            words = random.choice(['yes', 'no'])
         if words == None:
             words = 'yes'
     elif mode == 'chat':
@@ -1285,14 +1285,15 @@ def LLM(get_message, event, mode='text'):
             if words == None:
                 words = "I don't know."
             memories.append(words)
-            sheet.update(f'A{len(memories)-1}:A{len(memories)}', [[prompt], [words]])
+            sheet.update(f'A{len(memories)-1}:A{len(memories)}',
+                         [[prompt], [words]])
     if Lang.lang != 'en':
         if Lang.lang == 'zh-CN':
             reply = translator.translate(words, dest='zh-tw').text
         else:
             reply = translator.translate(
                 words, dest=Lang.lang).text
-        reply += f'\n\n{words}'
+        #reply += f'\n\n{words}'
     else:
         reply = words
     text_reply(reply, event)
