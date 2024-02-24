@@ -69,6 +69,7 @@ Message_counter = 0
 Message_container = ''
 previous_user_name = ''
 
+
 @app.route("/", methods=["GET", "POST"])
 def callback():
 
@@ -127,8 +128,8 @@ def handle_message(event):
     # Send To Line
     print(user_name+id)
 
-    if group_id == group:
-        F_countMSG(event)
+    # if group_id == group:
+    #     F_countMSG(event)
 
     if id == owner:
         if split[0] == '!bully':
@@ -139,7 +140,7 @@ def handle_message(event):
 
     if get_message[:4].lower() == '@bot' or get_message[:4] == '神奇海螺':
         LLM(get_message, event)
-    
+
     if get_message[:4].lower() == '!bot':
         LLM(get_message, event, mode='chat')
 
