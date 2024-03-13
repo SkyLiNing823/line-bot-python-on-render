@@ -1246,8 +1246,7 @@ def LLM(get_message, event, mode='text'):
     prompt = get_message[4:]
     translator = googletrans.Translator()
     Lang = translator.detect(prompt)
-    if Lang.lang != 'en':
-        prompt = translator.translate(prompt, dest='en').text
+    prompt = translator.translate(prompt, dest='en').text
     palm.configure(api_key=os.getenv('PaLM_KEY', None))
     models = [m for m in palm.list_models(
     ) if 'generateText' in m.supported_generation_methods]
