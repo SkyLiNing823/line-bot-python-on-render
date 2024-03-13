@@ -1253,6 +1253,7 @@ def LLM(get_message, event, mode='text'):
     ) if 'generateText' in m.supported_generation_methods]
     model = models[0].name
     if mode == 'text':
+        print(prompt)
         completion = palm.generate_text(
             model=model,
             prompt=prompt,
