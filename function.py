@@ -196,22 +196,22 @@ def F_countMSG(event):
         sheet.update_cell(dates.index(dt)+1, 2, str(n+1))
 
 
-def bully_reload():
+def resp_reload():
     sheet = sheet_reload("1GmO4ygrYvr2fv7z-PuFZZegQDt694PyMidHL3KWEHU4")
-    bullyData = sheet.get_all_values()
-    bully_names = [bullyData[i][0]
-                   for i in range(len(bullyData))]
-    bully_p = [bullyData[i][1]
-               for i in range(len(bullyData))]
-    words = [bullyData[i][2]
-             for i in range(len(bullyData))]
-    bully_words = []
+    respData = sheet.get_all_values()
+    resp_names = [respData[i][0]
+                   for i in range(len(respData))]
+    resp_p = [respData[i][1]
+               for i in range(len(respData))]
+    words = [respData[i][2]
+             for i in range(len(respData))]
+    resp_words = []
     for i in words:
-        bully_words.append(i.split(','))
-    return sheet, bully_names, bully_p, bully_words
+        resp_words.append(i.split(','))
+    return sheet, resp_names, resp_p, resp_words
 
 
-def bully(n, List, event):
+def resp(n, List, event):
     if n > 0:
         randNum = random.randint(1, n)
         if randNum == 1:
@@ -219,73 +219,73 @@ def bully(n, List, event):
             text_reply(text, event)
 
 
-def F_bullyManager(split, event):
-    sheet, bully_names, bully_p, bully_words = bully_reload()
+def F_respManager(split, event):
+    sheet, resp_names, resp_p, resp_words = resp_reload()
     if len(split) == 2:
         if split[1] == 'list':
             keys = ""
-            for i in range(len(bully_names)):
-                if int(bully_p[i]) != 0:
-                    keys += bully_names[i]+'\n'
+            for i in range(len(resp_names)):
+                if int(resp_p[i]) != 0:
+                    keys += resp_names[i]+'\n'
             text_reply(f'名單:\n{keys}', event)
-        elif split[1] in bully_names:
-            p = bully_p[bully_names.index(split[1])]
-            words = bully_words[bully_names.index(split[1])]
+        elif split[1] in resp_names:
+            p = resp_p[resp_names.index(split[1])]
+            words = resp_words[resp_names.index(split[1])]
             text_reply(f'p:{p}\nwords:\n{words}', event)
         else:
             text_reply(f'名單無此人', event)
     elif split[2] == 'p':
-        if split[1] in bully_names:
-            bully_p[bully_names.index(split[1])] = split[3]
-            sheet.update_cell(bully_names.index(
+        if split[1] in resp_names:
+            resp_p[resp_names.index(split[1])] = split[3]
+            sheet.update_cell(resp_names.index(
                 split[1])+1, 2, split[3])
-            text_reply(f'{split[1]}的被霸凌機率已調整為1/{split[3]}', event)
+            text_reply(f'{split[1]}的回覆機率已調整為1/{split[3]}', event)
         else:
-            sheet.append_row([split[1], split[3], f'{split[1]}去死'])
-            text_reply(f'{split[1]}未登錄霸凌名單，現已登錄且將被霸凌機率設為1/{split[3]}', event)
+            sheet.append_row([split[1], split[3], f'{split[1]}你好'])
+            text_reply(f'{split[1]}未登錄回覆名單，現已登錄且將被回覆機率設為1/{split[3]}', event)
     elif split[2] == '+':
-        if split[1] in bully_names:
-            if split[3] not in bully_words[bully_names.index(split[1])]:
-                bully_words[bully_names.index(
+        if split[1] in resp_names:
+            if split[3] not in resp_words[resp_names.index(split[1])]:
+                resp_words[resp_names.index(
                     split[1])].append(split[3])
                 words = ''
-                for i in bully_words[bully_names.index(split[1])]:
+                for i in resp_words[resp_names.index(split[1])]:
                     words += ','+str(i)
                 sheet.update_cell(
-                    bully_names.index(split[1])+1, 3, words[1:])
+                    resp_names.index(split[1])+1, 3, words[1:])
                 text_reply(
-                    f'資料庫已加入「{split[3]}」\n現已收錄:{bully_words[bully_names.index(split[1])]}', event)
+                    f'資料庫已加入「{split[3]}」\n現已收錄:{resp_words[resp_names.index(split[1])]}', event)
             else:
                 text_reply('此句已存在', event)
         else:
             sheet.append_row([split[1], '5', split[3]])
-            text_reply(f'{split[1]}未登錄霸凌名單\n現已登錄且收錄:[\'{split[3]}\']', event)
+            text_reply(f'{split[1]}未登錄回覆名單\n現已登錄且收錄:[\'{split[3]}\']', event)
     elif split[2] == '-':
-        if split[1] in bully_names:
-            if split[3] in bully_words[bully_names.index(split[1])]:
-                bully_words[bully_names.index(
+        if split[1] in resp_names:
+            if split[3] in resp_words[resp_names.index(split[1])]:
+                resp_words[resp_names.index(
                     split[1])].remove(split[3])
                 words = ''
-                for i in bully_words[bully_names.index(split[1])]:
+                for i in resp_words[resp_names.index(split[1])]:
                     words += ','+str(i)
                 sheet.update_cell(
-                    bully_names.index(split[1])+1, 3, words[1:])
+                    resp_names.index(split[1])+1, 3, words[1:])
 
                 text_reply(
-                    f'資料庫已刪除「{split[3]}」\n現已收錄:{bully_words[bully_names.index(split[1])]}', event)
+                    f'資料庫已刪除「{split[3]}」\n現已收錄:{resp_words[resp_names.index(split[1])]}', event)
             else:
                 text_reply('此句不存在', event)
         else:
-            text_reply(f'{split[1]}未登錄霸凌名單', event)
+            text_reply(f'{split[1]}未登錄回覆名單', event)
     elif split[2] == 'del':
-        if split[1] in bully_names:
-            bully_p[bully_names.index(split[1])] = '0'
-            sheet.update_cell(bully_names.index(
+        if split[1] in resp_names:
+            resp_p[resp_names.index(split[1])] = '0'
+            sheet.update_cell(resp_names.index(
                 split[1])+1, 2, '0')
             keys = ""
-            for i in range(len(bully_names)):
-                if int(bully_p[i]) != 0:
-                    keys += bully_names[i]+'\n'
+            for i in range(len(resp_names)):
+                if int(resp_p[i]) != 0:
+                    keys += resp_names[i]+'\n'
             text_reply(f'成員已移除{split[1]}\n目前名單:\n{keys}', event)
         else:
             text_reply(f'成員名單不存在{split[1]}', event)
@@ -531,7 +531,6 @@ def F_tmr(send_headers, split, event):
     session = requests.Session()
     session.post(url, headers=send_headers, data=data)
     URL = []
-    # 登入後，我們需要獲取另一個網頁中的內容
     response = session.get(
         'https://smavoice.jp/s/sma03/artist/45/contents?ima=4940&ct=45_122_02&tp=122&arti=45', headers=send_headers)
     html = response.content
@@ -557,55 +556,6 @@ def F_tmr(send_headers, split, event):
         if index > len(URL):
             index = len(URL)
         text_reply(URL[index-1], event)
-
-
-def F_nh(split, event):
-    # content = ''
-    URL = 'https://nhentai.net'
-    # serach_URL = 'https://nhentai.net/search/?q='
-    # if get_message.lower() == '!nh':
-    #     q = 'a'
-    #     serach_URL += q
-    #     request = requests.get(serach_URL)
-    #     html = request.content
-    #     bsObj = BeautifulSoup(html, 'html.parser')
-    #     shouter = bsObj.findAll('a', {'class': 'cover'})
-    #     for i in shouter:
-    #         num = i['href'][3:-1]
-    #         break
-    #     num = random.randint(1, int(num)+1)
-    #     content = URL + '/g/' + str(num) + '/'
-    # elif split[-1].isdigit() and len(split) == 2:
-    #     num = int(get_message[4:])
-    #     content = URL + '/g/' + str(num) + '/'
-    # else:
-    #     if split[-1].isdigit():
-    #         q = get_message[4:-1*(len(split[-1])+1)]
-    #         n = int(split[-1])
-    #     else:
-    #         q = get_message[4:]
-    #         n = 5
-    #     serach_URL += q
-    #     request = requests.get(serach_URL)
-    #     html = request.content
-    #     bsObj = BeautifulSoup(html, 'html.parser')
-    #     shouter = bsObj.findAll('a', {'class': 'cover'})
-    #     t = 0
-    #     for i in shouter:
-    #         t += 1
-    #         if t == n+1:
-    #             break
-    #         else:
-    #             content += URL+i['href']
-    #             if t != n:
-    #                 content += '\n'
-    content = URL + '/g/' + str(split[-1]) + '/'
-    text_reply(content, event)
-
-
-def F_wn(split, event):
-    content = f'https://www.wnacg.com/photos-index-aid-{str(split[-1])}.html'
-    text_reply(content, event)
 
 
 def F_ytPreview(l_get_message, jdata, event):
@@ -839,7 +789,7 @@ def F_twitterPreview(get_message, event):
     line_reply(msg, event)
     with open('twitterStack.txt', 'w') as f:
         f.write('')
-    #------------------- below is for Twitter API, but it's not free anymore :( ---------------------------------------#
+    #------------------- below is for Twitter API, but it's not work anymore :( ---------------------------------------#
     # urlElement = get_message.split('/')
     # auth = tweepy.OAuthHandler(
     #     os.getenv('TWITTER_APP_KEY', None), os.getenv('TWITTER_APP_SECRET', None))
@@ -897,14 +847,6 @@ def F_twitterPreview(get_message, event):
     #         msg.append(ImageSendMessage(
     #             original_content_url=media['media_url'].replace('http', 'https'), preview_image_url=media['media_url'].replace('http', 'https')))
     # line_reply(msg, event)
-
-
-def F_pixivPreview(get_message, event):
-    pass
-    # ID = get_message.split('/')[-1]
-    # api = AppPixivAPI()
-    # json_result = api.illust_detail(ID)
-    # URL = json_result.image_urls['large']
 
 
 def bahaLogin():
@@ -1098,30 +1040,6 @@ def F_rate(get_message, send_headers, event):
     text_reply(words, event)
 
 
-# def F_chatGPT(get_message, event):
-#     OPENAI_EMAIL = os.getenv("OPENAI_EMAIL")
-#     OPENAI_PASSWORD = os.getenv("OPENAI_PASSWORD")
-#     chat = ChatClient(OPENAI_EMAIL, OPENAI_PASSWORD)
-#     answer = chat.interact(get_message[5:])
-#     text_reply(answer, event)
-#     with open("json/chatGPT_config.json", encoding="utf-8") as f:
-#         config = json.load(f)
-#     chatbot = Chatbot(config, debug=False)
-#     prompt = "\nYou:\n"+get_message[5:]
-#     message = chatbot.get_chat_response(prompt)
-#     text_reply(message["message"], event)
-
-
-# def F_objectDetect(event):
-#     execution_path = os.getcwd()
-#     detector = ObjectDetection()
-#     detector.setModelTypeAsTinyYOLOv3()
-#     detector.setModelPath(os.path.join(execution_path, "yolo-tiny.h5"))
-#     detector.loadModel()
-#     detector.detectObjectsFromImage(input_image=os.path.join(execution_path, "IMG.png"), output_image_path=os.path.join(
-#         execution_path, "object.png"), minimum_percentage_probability=30,  extract_detected_objects=True)
-#     img_reply(uploadIMG("object.png"), event)
-
 
 def F_faceDetect(event, id):
     img = cv2.imread(f"{id}.png")
@@ -1153,44 +1071,6 @@ def F_faceDetect(event, id):
             cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
     cv2.imwrite("face.png", img)
     img_reply(uploadIMG("face.png"), event)
-
-
-def F_teacherReplace(event, id):
-    img = cv2.imread(f"{id}.png")
-    net = cv2.dnn.readNetFromCaffe(
-        "deploy.prototxt.txt", "res10_300x300_ssd_iter_140000.caffemodel")
-    h, w = img.shape[:2]
-    blob = cv2.dnn.blobFromImage(cv2.resize(
-        img, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
-    net.setInput(blob)
-    detections = net.forward()
-    for i in range(0, detections.shape[2]):
-        img2 = cv2.imread("teacher.jpg")
-        confidence = detections[0, 0, i, 2]
-        if confidence < 0.5:
-            continue
-        box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-        (startX, startY, endX, endY) = box.astype("int")
-        print(startX, startY, endX, endY)
-        img2 = cv2.resize(img2, (endX-startX, endY-startY),
-                          interpolation=cv2.INTER_AREA)
-        img[startY:endY, startX:endX] = img2
-    cv2.imwrite("teacherface.png", img)
-    img_reply(uploadIMG("teacherface.png"), event)
-
-
-def F_oppaiDetect(event, id):
-    img = cv2.imread(f"{id}.png")
-    color = (0, 255, 0)
-    grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    oppai_classifier = cv2.CascadeClassifier('./xml/cascade_oppai.xml')
-    oppaiRects = oppai_classifier.detectMultiScale(grayImg, scaleFactor=1.3)
-    if len(oppaiRects):
-        for oppaiRect in oppaiRects:
-            x, y, w, h = oppaiRect
-            cv2.rectangle(img, (x, y), (x + h, y + w), color, 2)
-    cv2.imwrite("oppai.png", img)
-    img_reply(uploadIMG("oppai.png"), event)
 
 
 def F_removeBG(event, id):
@@ -1287,42 +1167,6 @@ def LLM(get_message, event, mode='text'):
             memories.append(words)
             sheet.update(f'A{len(memories)-1}:A{len(memories)}',
                          [[prompt], [words]])
-    # print(Lang.lang)
-    # if Lang.lang != 'en':
-    #     reply = translator.translate(
-    #         words, dest=Lang.lang).text
-    #     #reply += f'\n\n{words}'
-    # else:
-    #     reply = words
     reply = translator.translate(words, dest='zh-tw').text
     text_reply(reply, event)
 
-
-# def F_bot():
-    # line_bot_api.reply_message(  # 回復傳入的訊息文字
-    #         event.reply_token,
-    #         TemplateSendMessage(
-    #             alt_text='Buttons template',
-    #             template=ButtonsTemplate(
-    #                 title='遊戲選單',
-    #                 text='請選擇遊戲',
-    #                 actions=[
-    #                     MessageTemplateAction(
-    #                         label='game1',
-    #                         text='game1',
-    #                         data='A&game1'
-    #                     ),
-    #                     MessageTemplateAction(
-    #                         label='game2',
-    #                         text='game2',
-    #                         data='A&game2'
-    #                     ),
-    #                     MessageTemplateAction(
-    #                         label='game3',
-    #                         text='Upcoming...',
-    #                         data='A&game3'
-    #                     )
-    #                 ]
-    #             )
-    #         )
-    #     )
